@@ -127,6 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize theme
   initTheme();
+
+  // Initialize upazila keyboard navigation
+  initUpazilaKeyboardNav();
 });
 
 // ── Toast Notification System ────────────────────────────
@@ -592,6 +595,77 @@ function closeUpazilaDetail() {
 }
 
 // ── Upazila Filter ─────────────────────────────────────────
+let upazilaFocusIndex = -1;
+
+function getVisibleUpazilaItems() {
+  return Array.from(document.querySelectorAll('#upazilaList .upazila-item')).filter(
+    (item) => item.style.display !== 'none'
+  );
+}
+
+function focusUpazilaItem(index) {
+  // Remove focus from all items
+  document.querySelectorAll('#upazilaList .upazila-item').forEach((item) => {
+    item.classList.remove('focused');
+  });
+
+  const visible = getVisibleUpazilaItems();
+  if (visible.length === 0 || index < 0 || index >= visible.length) {
+    upazilaFocusIndex = -1;
+    return;
+  }
+
+  upazilaFocusIndex = index;
+  const target = visible[index];
+  target.classList.add('focused');
+  target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function initUpazilaKeyboardNav() {
+  const input = document.getElementById('upazilaFilterInput');
+  if (!input) return;
+
+  input.addEventListener('keydown', (e) => {
+    const visible = getVisibleUpazilaItems();
+    if (visible.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown': {
+        e.preventDefault();
+        const next = upazilaFocusIndex < visible.length - 1 ? upazilaFocusIndex + 1 : 0;
+        focusUpazilaItem(next);
+        break;
+      }
+      case 'ArrowUp': {
+        e.preventDefault();
+        const prev = upazilaFocusIndex > 0 ? upazilaFocusIndex - 1 : visible.length - 1;
+        focusUpazilaItem(prev);
+        break;
+      }
+      case 'Enter': {
+        if (upazilaFocusIndex >= 0 && upazilaFocusIndex < visible.length) {
+          e.preventDefault();
+          visible[upazilaFocusIndex].click();
+        }
+        break;
+      }
+      case 'Escape': {
+        if (currentUpazilaDetail) {
+          e.preventDefault();
+          closeUpazilaDetail();
+        }
+        break;
+      }
+    }
+  });
+
+  // Reset focus when input loses focus
+  input.addEventListener('blur', () => {
+    // Delay so click events on items can fire first
+    setTimeout(() => focusUpazilaItem(-1), 150);
+  });
+}
+
 function filterUpazilas() {
   const input = document.getElementById('upazilaFilterInput');
   const query = input.value.trim().toLowerCase();
@@ -613,6 +687,9 @@ function filterUpazilas() {
   } else {
     noResults.classList.add('hidden');
   }
+
+  // Reset keyboard focus when filter changes
+  focusUpazilaItem(-1);
 }
 
 function clearUpazilaFilter() {
@@ -625,6 +702,8 @@ function clearUpazilaFilter() {
   document.querySelectorAll('#upazilaList .upazila-item').forEach((item) => {
     item.style.display = '';
   });
+  // Reset keyboard focus
+  focusUpazilaItem(-1);
 }
 
 // ── Utility Metadata ─────────────────────────────────────

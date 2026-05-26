@@ -964,6 +964,13 @@ body::after {
   background: rgba(74, 124, 247, 0.05);
 }
 
+.upazila-item.focused {
+  border-color: var(--accent-blue);
+  background: rgba(74, 124, 247, 0.12);
+  box-shadow: 0 0 0 2px rgba(74, 124, 247, 0.15), 0 0 15px rgba(74, 124, 247, 0.08);
+  transform: translateY(-1px);
+}
+
 .upazila-item:active {
   transform: scale(0.97);
 }
