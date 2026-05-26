@@ -10,11 +10,22 @@
 </head>
 <body>
 
+  <!-- Floating decorative orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ⚡ Toast Notifications -->
+  <div id="toastContainer" class="toast-container"></div>
+
   <!-- ⚡ Hero Header -->
   <header class="hero">
+    <div class="hero-lightning"></div>
     <div class="hero-content">
       <div class="logo">
-        <span class="logo-icon">⚡</span>
+        <div class="logo-icon-wrapper">
+          <span class="logo-icon">⚡</span>
+        </div>
         <h1>বিদ্যুতজ্ঞান</h1>
       </div>
       <p class="subtitle">আপনার এলাকার লোডশেডিং সময়সূচী ও বিদ্যুৎ সরবরাহকারীর তথ্য</p>
@@ -41,13 +52,42 @@
           id="searchInput"
           placeholder="জেলা বা বিভাগের নাম লিখুন (Bangla/English)..."
           autocomplete="off"
-          oninput="handleSearch()"
         />
         <button class="btn btn-primary" onclick="handleSearch()">🔍 অনুসন্ধান</button>
       </div>
 
       <div id="searchResults" class="search-results hidden"></div>
     </section>
+
+    <!-- Skeleton Loaders (shown while loading) -->
+    <div id="skeletonResults" class="hidden">
+      <div class="card">
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton-grid">
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+        </div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text" style="width:50%"></div>
+      </div>
+    </div>
+
+    <div id="skeletonBrowser" class="hidden">
+      <div class="card">
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-accordion-item"></div>
+        <div class="skeleton skeleton-accordion-item"></div>
+        <div class="skeleton skeleton-accordion-item"></div>
+        <div class="skeleton skeleton-accordion-item"></div>
+        <div class="skeleton skeleton-accordion-item"></div>
+        <div class="skeleton skeleton-accordion-item"></div>
+        <div class="skeleton skeleton-accordion-item"></div>
+        <div class="skeleton skeleton-accordion-item"></div>
+      </div>
+    </div>
 
     <!-- 📊 Result Card -->
     <section id="resultCard" class="card result-card hidden">
@@ -75,18 +115,12 @@
         </div>
       </div>
 
-      <!-- Schedule Placeholder -->
+      <!-- Schedule Timeline -->
       <div class="schedule-section">
         <h3 id="scheduleTitle">📋 আজকের সম্ভাব্য লোডশেডিং সময়সূচী</h3>
-        <div id="schedulePlaceholder" class="schedule-placeholder">
+        <div id="scheduleTimeline" class="schedule-timeline"></div>
+        <div class="schedule-placeholder">
           <p id="scheduleComingSoon">⏳ শীঘ্রই আসছে — কমিউনিটি রিপোর্টের ভিত্তিতে সময়সূচী তৈরি হবে</p>
-          <div class="schedule-demo">
-            <span class="demo-slot">🟢 সকাল ৬-৮টা: <strong>বন্ধ নেই</strong></span>
-            <span class="demo-slot">🟡 সকাল ৮-১২টা: <strong>সম্ভাব্য</strong></span>
-            <span class="demo-slot">🔴 দুপুর ১২-২টা: <strong>লোডশেডিং হতে পারে</strong></span>
-            <span class="demo-slot">🟡 বিকাল ২-৬টা: <strong>সম্ভাব্য</strong></span>
-            <span class="demo-slot">🟢 রাত ৬-১২টা: <strong>বন্ধ নেই</strong></span>
-          </div>
           <p class="demo-note" id="demoNote">* ডেমো সময়সূচী — বাস্তব সময়সূচী কমিউনিটি রিপোর্টের মাধ্যমে তৈরি হবে</p>
         </div>
       </div>
@@ -102,7 +136,6 @@
             💡 পাওয়ার এসেছে
           </button>
         </div>
-        <p id="reportFeedback" class="report-feedback hidden"></p>
       </div>
 
       <!-- Utility Info -->
@@ -114,7 +147,7 @@
     </section>
 
     <!-- 🗺️ Quick District Browser -->
-    <section class="card browser-card">
+    <section id="browserCard" class="card browser-card">
       <h2 id="browserTitle">🗺️ সব জেলা ব্রাউজ করুন</h2>
       <div id="divisionAccordion" class="accordion">
         <!-- Populated by JS -->

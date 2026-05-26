@@ -6,6 +6,12 @@
 let currentLang = 'bn'; // 'bn' | 'en'
 let selectedDistrict = null;
 let allDistrictsCache = [];
+let searchTimeout = null;
+let isLoading = {
+  districts: false,
+  divisions: false,
+  accordion: false,
+};
 
 // ── Strings ──────────────────────────────────────────────
 const STRINGS = {
@@ -23,8 +29,8 @@ const STRINGS = {
     distanceLabel: '📏 দূরত্ব',
     scheduleTitle: '📋 আজকের সম্ভাব্য লোডশেডিং সময়সূচী',
     utilityInfoTitle: 'ℹ️ সরবরাহকারীর তথ্য',
-    powerCutReported: '✅ রিপোর্ট করা হয়েছে! আপনার রিপোর্ট এলাকার অন্যদের সাহায্য করবে।',
-    powerOnReported: '✅ রিপোর্ট করা হয়েছে! ধন্যবাদ, পাওয়ার ফিরেছে।',
+    powerCutReported: '🔌 পাওয়ার কাট রিপোর্ট করা হয়েছে!',
+    powerOnReported: '💡 পাওয়ার ফিরেছে! ধন্যবাদ।',
     findingLocation: '📡 অবস্থান খোঁজা হচ্ছে...',
     searchNoResults: 'কোনো জেলা পাওয়া যায়নি',
     poweredBy: '⚡ বিদ্যুতজ্ঞান — নির্মিত বাংলাদেশের জন্য',
@@ -34,6 +40,16 @@ const STRINGS = {
     typeRural: 'পল্লী',
     langLabel: 'English',
     searching: 'অনুসন্ধান...',
+    locationDenied: 'অবস্থান অ্যাক্সেস করতে ব্যর্থ। দয়া করে অবস্থান অনুমতি দিন।',
+    locationNotFound: 'আপনার এলাকা খুঁজে পাওয়া যায়নি',
+    noGeolocation: 'আপনার ব্রাউজারে অবস্থান সুবিধা নেই',
+    scheduleSlots: [
+      { time: 'সকাল ৬-৮টা', status: 'green', label: 'বন্ধ নেই', width: 15 },
+      { time: 'সকাল ৮-১২টা', status: 'yellow', label: 'সম্ভাব্য', width: 50 },
+      { time: 'দুপুর ১২-২টা', status: 'red', label: 'লোডশেডিং হতে পারে', width: 85 },
+      { time: 'বিকাল ২-৬টা', status: 'yellow', label: 'সম্ভাব্য', width: 50 },
+      { time: 'রাত ৬-১২টা', status: 'green', label: 'বন্ধ নেই', width: 15 },
+    ],
   },
   en: {
     searchPlaceholder: 'Search district or division name...',
@@ -49,8 +65,8 @@ const STRINGS = {
     distanceLabel: '📏 Distance',
     scheduleTitle: '📋 Today\'s Expected Load Shedding Schedule',
     utilityInfoTitle: 'ℹ️ Supplier Information',
-    powerCutReported: '✅ Reported! Your report will help others in your area.',
-    powerOnReported: '✅ Reported! Thanks, power is back.',
+    powerCutReported: '🔌 Power cut reported!',
+    powerOnReported: '💡 Power is back! Thanks.',
     findingLocation: '📡 Finding location...',
     searchNoResults: 'No districts found',
     poweredBy: '⚡ BidyutGyan — Built for Bangladesh',
@@ -60,6 +76,16 @@ const STRINGS = {
     typeRural: 'Rural',
     langLabel: 'বাংলা',
     searching: 'Searching...',
+    locationDenied: 'Failed to access location. Please allow location permission.',
+    locationNotFound: 'Could not find your area',
+    noGeolocation: 'Geolocation not available in your browser',
+    scheduleSlots: [
+      { time: '6-8 AM', status: 'green', label: 'No outage', width: 15 },
+      { time: '8-12 AM', status: 'yellow', label: 'Possible', width: 50 },
+      { time: '12-2 PM', status: 'red', label: 'May shed', width: 85 },
+      { time: '2-6 PM', status: 'yellow', label: 'Possible', width: 50 },
+      { time: '6-12 PM', status: 'green', label: 'No outage', width: 15 },
+    ],
   },
 };
 
@@ -68,18 +94,68 @@ const API_BASE = '/api';
 
 // ── Init ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  showSkeletons('browser');
   loadAllDistricts();
   buildAccordion();
+
+  // Enter key to search
+  document.getElementById('searchInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch();
+    }
+  });
+
+  // Debounced search input
+  document.getElementById('searchInput').addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => handleSearch(), 250);
+  });
 });
+
+// ── Toast Notification System ────────────────────────────
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('leaving');
+    setTimeout(() => toast.remove(), 250);
+  }, 3000);
+}
+
+// ── Skeleton Loaders ─────────────────────────────────────
+function showSkeletons(target) {
+  if (target === 'browser') {
+    document.getElementById('skeletonBrowser').classList.remove('hidden');
+    document.getElementById('browserCard').classList.add('hidden');
+  }
+}
+
+function hideSkeletons(target) {
+  if (target === 'browser') {
+    document.getElementById('skeletonBrowser').classList.add('hidden');
+    document.getElementById('browserCard').classList.remove('hidden');
+  }
+}
 
 // ── Load District Data ───────────────────────────────────
 async function loadAllDistricts() {
+  if (isLoading.districts) return;
+  isLoading.districts = true;
+
   try {
     const res = await fetch(`${API_BASE}/districts`);
     const data = await res.json();
     allDistrictsCache = data.districts || [];
   } catch (err) {
     console.error('Failed to load districts:', err);
+    showToast(currentLang === 'bn' ? 'ডেটা লোড করতে ব্যর্থ' : 'Failed to load data', 'error');
+  } finally {
+    isLoading.districts = false;
   }
 }
 
@@ -111,20 +187,27 @@ function updateUILanguage() {
   document.querySelector('.footer p:first-child').textContent = s.poweredBy;
   document.querySelector('.footer-small').textContent = s.footerNote;
 
+  // Re-render schedule timeline with new language
+  renderScheduleTimeline();
+
   // Re-render data if district is selected
   if (selectedDistrict) {
     renderDistrictInfo(selectedDistrict);
   }
+
+  // Update accordion headers text without re-fetching
+  updateAccordionLanguage();
 }
 
 // ── Geolocation ──────────────────────────────────────────
 function getLocation() {
+  const s = STRINGS[currentLang];
+
   if (!navigator.geolocation) {
-    alert(currentLang === 'bn' ? 'আপনার ব্রাউজারে অবস্থান সুবিধা নেই' : 'Geolocation not available');
+    showToast(s.noGeolocation, 'error');
     return;
   }
 
-  const s = STRINGS[currentLang];
   document.getElementById('locateText').textContent = s.findingLocation;
   document.getElementById('locateBtn').disabled = true;
 
@@ -138,25 +221,23 @@ function getLocation() {
         selectedDistrict = data;
         renderDistrictInfo(data);
         document.getElementById('searchResults').classList.add('hidden');
-      } catch (err) {
-        console.error('Location lookup failed:', err);
-        alert(currentLang === 'bn' ? 'আপনার এলাকা খুঁজে পাওয়া যায়নি' : 'Could not find your area');
+      } catch {
+        showToast(s.locationNotFound, 'error');
       } finally {
         document.getElementById('locateText').textContent = s.locateText;
         document.getElementById('locateBtn').disabled = false;
       }
     },
-    (err) => {
-      console.error('Geolocation error:', err);
-      alert(currentLang === 'bn' ? 'অবস্থান অ্যাক্সেস করতে ব্যর্থ। দয়া করে অবস্থান অনুমতি দিন।' : 'Failed to access location. Please allow location permission.');
-      document.getElementById('locateText').textContent = STRINGS[currentLang].locateText;
+    () => {
+      showToast(s.locationDenied, 'error');
+      document.getElementById('locateText').textContent = s.locateText;
       document.getElementById('locateBtn').disabled = false;
     },
     { enableHighAccuracy: true, timeout: 10000 }
   );
 }
 
-// ── Search ───────────────────────────────────────────────
+// ── Search (un-debounced for direct calls) ────────────────
 function handleSearch() {
   const query = document.getElementById('searchInput').value.trim();
   const resultsDiv = document.getElementById('searchResults');
@@ -173,12 +254,14 @@ function handleSearch() {
         renderSearchResults(data.results);
         resultsDiv.classList.remove('hidden');
       } else {
-        resultsDiv.innerHTML = `<div class="search-result-item" style="justify-content:center;color:var(--text-secondary)">${STRINGS[currentLang].searchNoResults}</div>`;
+        resultsDiv.innerHTML = `
+          <div class="search-result-item" style="justify-content:center;color:var(--text-secondary)">
+            ${STRINGS[currentLang].searchNoResults}
+          </div>`;
         resultsDiv.classList.remove('hidden');
       }
     })
-    .catch((err) => {
-      console.error('Search failed:', err);
+    .catch(() => {
       resultsDiv.classList.add('hidden');
     });
 }
@@ -207,9 +290,29 @@ async function selectDistrict(slug) {
     const data = await res.json();
     selectedDistrict = data;
     renderDistrictInfo(data);
-  } catch (err) {
-    console.error('Failed to load district:', err);
+  } catch {
+    showToast(currentLang === 'bn' ? 'জেলা তথ্য লোড করতে ব্যর্থ' : 'Failed to load district', 'error');
   }
+}
+
+// ── Schedule Timeline ────────────────────────────────────
+function renderScheduleTimeline() {
+  const container = document.getElementById('scheduleTimeline');
+  const slots = STRINGS[currentLang].scheduleSlots;
+
+  container.innerHTML = slots
+    .map(
+      (slot) => `
+      <div class="schedule-slot">
+        <span class="schedule-time">${slot.time}</span>
+        <div class="schedule-bar-wrapper">
+          <div class="schedule-bar ${slot.status}" style="width:${slot.width}%"></div>
+        </div>
+        <span class="schedule-status ${slot.status}">${slot.label}</span>
+      </div>
+    `
+    )
+    .join('');
 }
 
 // ── Render District Info ─────────────────────────────────
@@ -233,7 +336,6 @@ function renderDistrictInfo(data) {
     en: { urban: 'Urban', regional: 'Regional', rural: 'Rural' },
   };
 
-  // Show utility types from first utility
   const firstUtil = dist.utilities[0];
   const utilData = getUtilityType(firstUtil);
   document.getElementById('resultType').textContent = utilData
@@ -247,6 +349,9 @@ function renderDistrictInfo(data) {
   } else {
     distanceEl.textContent = '—';
   }
+
+  // Schedule timeline
+  renderScheduleTimeline();
 
   // Utility info
   const utilInfo = document.getElementById('utilityInfo');
@@ -263,7 +368,6 @@ function renderDistrictInfo(data) {
     })
     .join('');
 
-  // Show website for first utility
   const firstUtilInfo = getUtilityInfo(firstUtil);
   if (firstUtilInfo && firstUtilInfo.website) {
     utilLink.href = firstUtilInfo.website;
@@ -304,25 +408,26 @@ function getUtilityType(code) {
 
 // ── Reports ──────────────────────────────────────────────
 function reportPowerCut() {
-  if (!selectedDistrict) return;
-  const feedback = document.getElementById('reportFeedback');
-  feedback.textContent = STRINGS[currentLang].powerCutReported;
-  feedback.className = 'report-feedback status-off';
-  feedback.classList.remove('hidden');
-  setTimeout(() => feedback.classList.add('hidden'), 3000);
+  if (!selectedDistrict) {
+    showToast(currentLang === 'bn' ? 'প্রথমে একটি জেলা নির্বাচন করুন' : 'Select a district first', 'error');
+    return;
+  }
+  showToast(STRINGS[currentLang].powerCutReported, 'error');
 }
 
 function reportPowerOn() {
-  if (!selectedDistrict) return;
-  const feedback = document.getElementById('reportFeedback');
-  feedback.textContent = STRINGS[currentLang].powerOnReported;
-  feedback.className = 'report-feedback status-on';
-  feedback.classList.remove('hidden');
-  setTimeout(() => feedback.classList.add('hidden'), 3000);
+  if (!selectedDistrict) {
+    showToast(currentLang === 'bn' ? 'প্রথমে একটি জেলা নির্বাচন করুন' : 'Select a district first', 'error');
+    return;
+  }
+  showToast(STRINGS[currentLang].powerOnReported, 'success');
 }
 
 // ── Accordion ────────────────────────────────────────────
 async function buildAccordion() {
+  if (isLoading.accordion) return;
+  isLoading.accordion = true;
+
   try {
     const res = await fetch(`${API_BASE}/divisions`);
     const { divisions } = await res.json();
@@ -336,6 +441,7 @@ async function buildAccordion() {
       window._utilityCache = utilData.utilities || {};
     }
 
+    // Close first open accordion when opening another
     const container = document.getElementById('divisionAccordion');
     container.innerHTML = '';
 
@@ -350,34 +456,86 @@ async function buildAccordion() {
           <span class="chevron">▼</span>
         </button>
         <div class="accordion-body">
-          ${divDistricts
-            .map(
-              (d) => `
-            <div class="accordion-district" onclick="selectDistrict('${d.district.key}')">
-              <span>${currentLang === 'bn' ? d.district.name_bn : d.district.name_en}</span>
-              <span class="district-utility">${d.district.utilities[0]}</span>
-            </div>
-          `
-            )
-            .join('')}
+          <div>
+            ${divDistricts
+              .map(
+                (d) => `
+              <div class="accordion-district" onclick="selectDistrict('${d.district.key}')">
+                <span>${currentLang === 'bn' ? d.district.name_bn : d.district.name_en}</span>
+                <span class="district-utility">${d.district.utilities[0]}</span>
+              </div>
+            `
+              )
+              .join('')}
+          </div>
         </div>
       `;
       container.appendChild(item);
     });
-  } catch (err) {
-    console.error('Failed to build accordion:', err);
+
+    hideSkeletons('browser');
+  } catch {
+    showToast(currentLang === 'bn' ? 'বিভাগের তথ্য লোড করতে ব্যর্থ' : 'Failed to load divisions', 'error');
+  } finally {
+    isLoading.accordion = false;
   }
 }
 
+// ── Update Accordion Language (from cache, no API calls) ──
+function updateAccordionLanguage() {
+  const items = document.querySelectorAll('.accordion-item');
+  items.forEach((item) => {
+    const header = item.querySelector('.accordion-header');
+    if (!header) return;
+
+    // Find matching division data from cache
+    const headerText = header.querySelector('span:first-child');
+    if (!headerText) return;
+
+    // Extract division key from the stored district data
+    const divKey = headerText.textContent.match(/^[^(]+/)?.[0]?.trim();
+    if (!divKey) return;
+
+    // Update division name using cached data
+    const divData = allDistrictsCache
+      .map((d) => d.division)
+      .find((dv) => currentLang === 'bn' ? dv.name_bn === divKey || dv.name_en === divKey : dv.name_en === divKey || dv.name_bn === divKey);
+
+    if (divData) {
+      const count = headerText.textContent.match(/\((\d+)\)/)?.[1] || '';
+      headerText.textContent = `${currentLang === 'bn' ? divData.name_bn : divData.name_en} (${count})`;
+    }
+
+    // Update district names within the accordion body
+    const districts = item.querySelectorAll('.accordion-district');
+    districts.forEach((d) => {
+      const nameSpan = d.querySelector('span:first-child');
+      if (!nameSpan) return;
+
+      const origName = nameSpan.textContent.trim();
+      const match = allDistrictsCache.find(
+        (dist) =>
+          dist.district.name_bn === origName ||
+          dist.district.name_en === origName
+      );
+      if (match) {
+        nameSpan.textContent = currentLang === 'bn' ? match.district.name_bn : match.district.name_en;
+      }
+    });
+  });
+}
+
 function toggleAccordion(header) {
+  // Close all other open accordion items
+  document.querySelectorAll('.accordion-header.active').forEach((h) => {
+    if (h !== header) {
+      h.classList.remove('active');
+      h.nextElementSibling.classList.remove('open');
+    }
+  });
+
+  // Toggle current
   header.classList.toggle('active');
   const body = header.nextElementSibling;
   body.classList.toggle('open');
 }
-
-// ── Keyboard shortcut: Enter to search ──────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('searchInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSearch();
-  });
-});
