@@ -9,4 +9,5 @@ services:
         value: BidyutGyan (বিদ্যুতজ্ঞান)
       - key: DEMO_MODE
         value: "true"
+    healthCheckPath: /api/health
     autoDeploy: true

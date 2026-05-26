@@ -132,5 +132,11 @@ def health_check():
     }
 
 
+# Render's default health check hits /health (not /api/health)
+@app.get("/health")
+def render_health_check():
+    return {"status": "ok"}
+
+
 # ── Static Files (MUST be last — catches all remaining routes) ─
 app.mount("/", StaticFiles(directory=str(settings.base_dir / "frontend"), html=True), name="frontend")
