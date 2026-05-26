@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: bidyutgyan
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_NAME
+        value: BidyutGyan (বিদ্যুতজ্ঞান)
+      - key: DEMO_MODE
+        value: "true"
+    autoDeploy: true

@@ -1,0 +1,170 @@
+{
+  "_comment": "BidyutGyan (বিদ্যুতজ্ঞান) — Bangladesh Electricity Utility Mapping",
+  "_version": "1.0.0",
+  "_description": "Maps all 64 districts of Bangladesh to their primary electricity distribution utility companies.",
+  "_utilities": {
+    "DESCO": {
+      "name_en": "Dhaka Electric Supply Company Ltd.",
+      "name_bn": "ঢাকা ইলেকট্রিক সাপ্লাই কোম্পানি লিমিটেড",
+      "short_bn": "ডেসকো",
+      "type": "urban",
+      "website": "https://www.desco.org.bd",
+      "zones": ["Northern & Eastern Dhaka Metro (Mirpur, Gulshan, Banani, Uttara, Baridhara)", "Tongi", "Parts of Gazipur"]
+    },
+    "DPDC": {
+      "name_en": "Dhaka Power Distribution Company Ltd.",
+      "name_bn": "ঢাকা পাওয়ার ডিস্ট্রিবিউশন কোম্পানি লিমিটেড",
+      "short_bn": "ডিপিডিসি",
+      "type": "urban",
+      "website": "https://www.dpdc.org.bd",
+      "zones": ["Central & Southern Dhaka Metro (Old Dhaka, Motijheel, Lalbagh)", "Narayanganj"]
+    },
+    "NESCO": {
+      "name_en": "Northern Electricity Supply Company PLC",
+      "name_bn": "নর্দান ইলেকট্রিসিটি সাপ্লাই কোম্পানি পিএলসি",
+      "short_bn": "নেসকো",
+      "type": "regional",
+      "website": "https://www.nesco.gov.bd",
+      "zones": ["Rajshahi Division", "Rangpur Division"]
+    },
+    "WZPDCL": {
+      "name_en": "West Zone Power Distribution Company Ltd.",
+      "name_bn": "ওয়েস্ট জোন পাওয়ার ডিস্ট্রিবিউশন কোম্পানি লিমিটেড",
+      "short_bn": "ওজোপাডিকো",
+      "type": "regional",
+      "website": "https://www.wzpdcl.gov.bd",
+      "zones": ["Khulna Division", "Barisal Division", "Parts of Faridpur region"]
+    },
+    "BPDB": {
+      "name_en": "Bangladesh Power Development Board",
+      "name_bn": "বাংলাদেশ বিদ্যুৎ উন্নয়ন বোর্ড",
+      "short_bn": "বিপিডিবি",
+      "type": "regional",
+      "website": "https://www.bpdb.gov.bd",
+      "zones": ["Chittagong Division", "Sylhet Division", "Mymensingh Division", "Parts of Comilla", "Parts of Dhaka Division (outside metro)"]
+    },
+    "BREB": {
+      "name_en": "Bangladesh Rural Electrification Board",
+      "name_bn": "বাংলাদেশ পল্লী বিদ্যুতায়ন বোর্ড",
+      "short_bn": "ব্রেব/পিবিএস",
+      "type": "rural",
+      "website": "https://www.breb.gov.bd",
+      "zones": ["All rural and semi-urban areas nationwide", "Operates through 80 Palli Bidyut Samity (PBS)"],
+      "_note": "BREB/PBS operates in EVERY district as the secondary/rural supplier."
+    }
+  },
+  "divisions": {
+    "dhaka": {
+      "name_en": "Dhaka Division",
+      "name_bn": "ঢাকা বিভাগ",
+      "districts": {
+        "dhaka": { "name_en": "Dhaka", "name_bn": "ঢাকা", "lat": 23.8103, "lon": 90.4125, "utilities": ["DESCO", "DPDC"], "primary": "DESCO (North/East), DPDC (South/Central)", "note": "Northern parts (Mirpur, Gulshan, Uttara) under DESCO; Southern parts (Old Dhaka, Motijheel) under DPDC" },
+        "faridpur": { "name_en": "Faridpur", "name_bn": "ফরিদপুর", "lat": 23.6000, "lon": 89.8300, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "gazipur": { "name_en": "Gazipur", "name_bn": "গাজীপুর", "lat": 24.0000, "lon": 90.4100, "utilities": ["DESCO", "BPDB"], "primary": "DESCO (urban parts), BPDB (remaining)", "note": "Industrial areas under DESCO" },
+        "gopalganj": { "name_en": "Gopalganj", "name_bn": "গোপালগঞ্জ", "lat": 23.0100, "lon": 89.8200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "kishoreganj": { "name_en": "Kishoreganj", "name_bn": "কিশোরগঞ্জ", "lat": 24.4400, "lon": 90.7800, "utilities": ["BPDB"], "primary": "BPDB" },
+        "madaripur": { "name_en": "Madaripur", "name_bn": "মাদারীপুর", "lat": 23.1600, "lon": 90.1900, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "manikganj": { "name_en": "Manikganj", "name_bn": "মানিকগঞ্জ", "lat": 23.8600, "lon": 90.0000, "utilities": ["BPDB"], "primary": "BPDB" },
+        "munshiganj": { "name_en": "Munshiganj", "name_bn": "মুন্সীগঞ্জ", "lat": 23.5400, "lon": 90.5300, "utilities": ["BPDB"], "primary": "BPDB" },
+        "narayanganj": { "name_en": "Narayanganj", "name_bn": "নারায়ণগঞ্জ", "lat": 23.6200, "lon": 90.5000, "utilities": ["DPDC"], "primary": "DPDC" },
+        "narsingdi": { "name_en": "Narsingdi", "name_bn": "নরসিংদী", "lat": 23.9200, "lon": 90.7200, "utilities": ["BPDB"], "primary": "BPDB" },
+        "rajbari": { "name_en": "Rajbari", "name_bn": "রাজবাড়ী", "lat": 23.7500, "lon": 89.6500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "shariatpur": { "name_en": "Shariatpur", "name_bn": "শরীয়তপুর", "lat": 23.2300, "lon": 90.3500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "tangail": { "name_en": "Tangail", "name_bn": "টাঙ্গাইল", "lat": 24.2500, "lon": 89.9200, "utilities": ["BPDB"], "primary": "BPDB" }
+      }
+    },
+    "chattogram": {
+      "name_en": "Chattogram Division",
+      "name_bn": "চট্টগ্রাম বিভাগ",
+      "districts": {
+        "bandarban": { "name_en": "Bandarban", "name_bn": "বান্দরবান", "lat": 22.1900, "lon": 92.2200, "utilities": ["BPDB"], "primary": "BPDB" },
+        "brahmanbaria": { "name_en": "Brahmanbaria", "name_bn": "ব্রাহ্মণবাড়িয়া", "lat": 23.9600, "lon": 91.1200, "utilities": ["BPDB"], "primary": "BPDB" },
+        "chandpur": { "name_en": "Chandpur", "name_bn": "চাঁদপুর", "lat": 23.2300, "lon": 90.6500, "utilities": ["BPDB"], "primary": "BPDB" },
+        "chattogram": { "name_en": "Chattogram", "name_bn": "চট্টগ্রাম", "lat": 22.3600, "lon": 91.8200, "utilities": ["BPDB"], "primary": "BPDB" },
+        "coxsbazar": { "name_en": "Cox's Bazar", "name_bn": "কক্সবাজার", "lat": 21.4300, "lon": 91.9800, "utilities": ["BPDB"], "primary": "BPDB" },
+        "cumilla": { "name_en": "Cumilla", "name_bn": "কুমিল্লা", "lat": 23.4570, "lon": 91.1780, "utilities": ["BPDB"], "primary": "BPDB" },
+        "feni": { "name_en": "Feni", "name_bn": "ফেনী", "lat": 23.0100, "lon": 91.3900, "utilities": ["BPDB"], "primary": "BPDB" },
+        "khagrachari": { "name_en": "Khagrachari", "name_bn": "খাগড়াছড়ি", "lat": 23.1200, "lon": 91.9700, "utilities": ["BPDB"], "primary": "BPDB" },
+        "lakshmipur": { "name_en": "Lakshmipur", "name_bn": "লক্ষ্মীপুর", "lat": 22.9400, "lon": 90.8300, "utilities": ["BPDB"], "primary": "BPDB" },
+        "noakhali": { "name_en": "Noakhali", "name_bn": "নোয়াখালী", "lat": 22.8200, "lon": 91.1000, "utilities": ["BPDB"], "primary": "BPDB" },
+        "rangamati": { "name_en": "Rangamati", "name_bn": "রাঙ্গামাটি", "lat": 22.6500, "lon": 92.1700, "utilities": ["BPDB"], "primary": "BPDB" }
+      }
+    },
+    "rajshahi": {
+      "name_en": "Rajshahi Division",
+      "name_bn": "রাজশাহী বিভাগ",
+      "districts": {
+        "bogura": { "name_en": "Bogura", "name_bn": "বগুড়া", "lat": 24.8510, "lon": 89.3700, "utilities": ["NESCO"], "primary": "NESCO" },
+        "chapainawabganj": { "name_en": "Chapai Nawabganj", "name_bn": "চাঁপাইনবাবগঞ্জ", "lat": 24.5900, "lon": 88.2700, "utilities": ["NESCO"], "primary": "NESCO" },
+        "joypurhat": { "name_en": "Joypurhat", "name_bn": "জয়পুরহাট", "lat": 25.1000, "lon": 89.0200, "utilities": ["NESCO"], "primary": "NESCO" },
+        "naogaon": { "name_en": "Naogaon", "name_bn": "নওগাঁ", "lat": 24.8000, "lon": 88.9300, "utilities": ["NESCO"], "primary": "NESCO" },
+        "natore": { "name_en": "Natore", "name_bn": "নাটোর", "lat": 24.4100, "lon": 89.0100, "utilities": ["NESCO"], "primary": "NESCO" },
+        "pabna": { "name_en": "Pabna", "name_bn": "পাবনা", "lat": 24.0000, "lon": 89.2500, "utilities": ["NESCO"], "primary": "NESCO" },
+        "rajshahi": { "name_en": "Rajshahi", "name_bn": "রাজশাহী", "lat": 24.3740, "lon": 88.6010, "utilities": ["NESCO"], "primary": "NESCO" },
+        "sirajganj": { "name_en": "Sirajganj", "name_bn": "সিরাজগঞ্জ", "lat": 24.4500, "lon": 89.7000, "utilities": ["NESCO"], "primary": "NESCO" }
+      }
+    },
+    "khulna": {
+      "name_en": "Khulna Division",
+      "name_bn": "খুলনা বিভাগ",
+      "districts": {
+        "bagerhat": { "name_en": "Bagerhat", "name_bn": "বাগেরহাট", "lat": 22.6600, "lon": 89.7900, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "chuadanga": { "name_en": "Chuadanga", "name_bn": "চুয়াডাঙ্গা", "lat": 23.6400, "lon": 88.8500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "jashore": { "name_en": "Jashore", "name_bn": "যশোর", "lat": 23.1700, "lon": 89.2200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "jhenaidah": { "name_en": "Jhenaidah", "name_bn": "ঝিনাইদহ", "lat": 23.5400, "lon": 89.1700, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "khulna": { "name_en": "Khulna", "name_bn": "খুলনা", "lat": 22.8450, "lon": 89.5400, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "kushtia": { "name_en": "Kushtia", "name_bn": "কুষ্টিয়া", "lat": 23.9000, "lon": 89.1200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "magura": { "name_en": "Magura", "name_bn": "মাগুরা", "lat": 23.4900, "lon": 89.4200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "meherpur": { "name_en": "Meherpur", "name_bn": "মেহেরপুর", "lat": 23.7600, "lon": 88.6300, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "narail": { "name_en": "Narail", "name_bn": "নড়াইল", "lat": 23.1600, "lon": 89.5000, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "satkhira": { "name_en": "Satkhira", "name_bn": "সাতক্ষীরা", "lat": 22.7200, "lon": 89.0700, "utilities": ["WZPDCL"], "primary": "WZPDCL" }
+      }
+    },
+    "barisal": {
+      "name_en": "Barisal Division",
+      "name_bn": "বরিশাল বিভাগ",
+      "districts": {
+        "barguna": { "name_en": "Barguna", "name_bn": "বরগুনা", "lat": 22.1500, "lon": 90.1200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "barisal": { "name_en": "Barisal", "name_bn": "বরিশাল", "lat": 22.7000, "lon": 90.3500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "bhola": { "name_en": "Bhola", "name_bn": "ভোলা", "lat": 22.6800, "lon": 90.6500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "jhalokati": { "name_en": "Jhalokati", "name_bn": "ঝালকাঠি", "lat": 22.6400, "lon": 90.2000, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "patuakhali": { "name_en": "Patuakhali", "name_bn": "পটুয়াখালী", "lat": 22.3500, "lon": 90.3200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "pirojpur": { "name_en": "Pirojpur", "name_bn": "পিরোজপুর", "lat": 22.5800, "lon": 89.9800, "utilities": ["WZPDCL"], "primary": "WZPDCL" }
+      }
+    },
+    "sylhet": {
+      "name_en": "Sylhet Division",
+      "name_bn": "সিলেট বিভাগ",
+      "districts": {
+        "habiganj": { "name_en": "Habiganj", "name_bn": "হবিগঞ্জ", "lat": 24.3700, "lon": 91.4100, "utilities": ["BPDB"], "primary": "BPDB" },
+        "moulvibazar": { "name_en": "Moulvibazar", "name_bn": "মৌলভীবাজার", "lat": 24.4800, "lon": 91.7700, "utilities": ["BPDB"], "primary": "BPDB" },
+        "sunamganj": { "name_en": "Sunamganj", "name_bn": "সুনামগঞ্জ", "lat": 25.0700, "lon": 91.4000, "utilities": ["BPDB"], "primary": "BPDB" },
+        "sylhet": { "name_en": "Sylhet", "name_bn": "সিলেট", "lat": 24.8940, "lon": 91.8690, "utilities": ["BPDB"], "primary": "BPDB" }
+      }
+    },
+    "rangpur": {
+      "name_en": "Rangpur Division",
+      "name_bn": "রংপুর বিভাগ",
+      "districts": {
+        "dinajpur": { "name_en": "Dinajpur", "name_bn": "দিনাজপুর", "lat": 25.6270, "lon": 88.6340, "utilities": ["NESCO"], "primary": "NESCO" },
+        "gaibandha": { "name_en": "Gaibandha", "name_bn": "গাইবান্ধা", "lat": 25.3200, "lon": 89.5400, "utilities": ["NESCO"], "primary": "NESCO" },
+        "kurigram": { "name_en": "Kurigram", "name_bn": "কুড়িগ্রাম", "lat": 25.8200, "lon": 89.6500, "utilities": ["NESCO"], "primary": "NESCO" },
+        "lalmonirhat": { "name_en": "Lalmonirhat", "name_bn": "লালমনিরহাট", "lat": 25.9000, "lon": 89.4500, "utilities": ["NESCO"], "primary": "NESCO" },
+        "nilphamari": { "name_en": "Nilphamari", "name_bn": "নীলফামারী", "lat": 25.9300, "lon": 88.8500, "utilities": ["NESCO"], "primary": "NESCO" },
+        "panchagarh": { "name_en": "Panchagarh", "name_bn": "পঞ্চগড়", "lat": 26.3400, "lon": 88.5600, "utilities": ["NESCO"], "primary": "NESCO" },
+        "rangpur": { "name_en": "Rangpur", "name_bn": "রংপুর", "lat": 25.7440, "lon": 89.2540, "utilities": ["NESCO"], "primary": "NESCO" },
+        "thakurgaon": { "name_en": "Thakurgaon", "name_bn": "ঠাকুরগাঁও", "lat": 26.0300, "lon": 88.4700, "utilities": ["NESCO"], "primary": "NESCO" }
+      }
+    },
+    "mymensingh": {
+      "name_en": "Mymensingh Division",
+      "name_bn": "ময়মনসিংহ বিভাগ",
+      "districts": {
+        "jamalpur": { "name_en": "Jamalpur", "name_bn": "জামালপুর", "lat": 24.9200, "lon": 89.9500, "utilities": ["BPDB"], "primary": "BPDB" },
+        "mymensingh": { "name_en": "Mymensingh", "name_bn": "ময়মনসিংহ", "lat": 24.7480, "lon": 90.4030, "utilities": ["BPDB"], "primary": "BPDB" },
+        "netrokona": { "name_en": "Netrokona", "name_bn": "নেত্রকোণা", "lat": 24.8700, "lon": 90.7300, "utilities": ["BPDB"], "primary": "BPDB" },
+        "sherpur": { "name_en": "Sherpur", "name_bn": "শেরপুর", "lat": 25.0200, "lon": 90.0200, "utilities": ["BPDB"], "primary": "BPDB" }
+      }
+    }
+  }
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বিদ্যুতজ্ঞান — লোডশেডিং সময়সূচী</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ⚡ Hero Header -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <h1>বিদ্যুতজ্ঞান</h1>
+      </div>
+      <p class="subtitle">আপনার এলাকার লোডশেডিং সময়সূচী ও বিদ্যুৎ সরবরাহকারীর তথ্য</p>
+      <div class="lang-toggle">
+        <button id="langBtn" class="lang-btn" onclick="toggleLang()">English</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 🔍 Search Section -->
+    <section class="card search-card">
+      <div class="search-header">
+        <h2 id="searchTitle">📍 আপনার এলাকা খুঁজুন</h2>
+        <button id="locateBtn" class="btn btn-secondary" onclick="getLocation()">
+          <span id="locateIcon">📡</span> <span id="locateText">আমার অবস্থান</span>
+        </button>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="জেলা বা বিভাগের নাম লিখুন (Bangla/English)..."
+          autocomplete="off"
+          oninput="handleSearch()"
+        />
+        <button class="btn btn-primary" onclick="handleSearch()">🔍 অনুসন্ধান</button>
+      </div>
+
+      <div id="searchResults" class="search-results hidden"></div>
+    </section>
+
+    <!-- 📊 Result Card -->
+    <section id="resultCard" class="card result-card hidden">
+      <div class="result-header">
+        <h2 id="resultDistrict">—</h2>
+        <span id="resultDivision" class="division-badge">—</span>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label" id="utilityLabel">⚡ বিদ্যুৎ সরবরাহকারী</span>
+          <span id="resultUtility" class="info-value">—</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label" id="supplierTypeLabel">🏢 ধরন</span>
+          <span id="resultType" class="info-value">—</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label" id="coordinatesLabel">📍 স্থানাঙ্ক</span>
+          <span id="resultCoords" class="info-value">—</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label" id="distanceLabel">📏 দূরত্ব</span>
+          <span id="resultDistance" class="info-value">—</span>
+        </div>
+      </div>
+
+      <!-- Schedule Placeholder -->
+      <div class="schedule-section">
+        <h3 id="scheduleTitle">📋 আজকের সম্ভাব্য লোডশেডিং সময়সূচী</h3>
+        <div id="schedulePlaceholder" class="schedule-placeholder">
+          <p id="scheduleComingSoon">⏳ শীঘ্রই আসছে — কমিউনিটি রিপোর্টের ভিত্তিতে সময়সূচী তৈরি হবে</p>
+          <div class="schedule-demo">
+            <span class="demo-slot">🟢 সকাল ৬-৮টা: <strong>বন্ধ নেই</strong></span>
+            <span class="demo-slot">🟡 সকাল ৮-১২টা: <strong>সম্ভাব্য</strong></span>
+            <span class="demo-slot">🔴 দুপুর ১২-২টা: <strong>লোডশেডিং হতে পারে</strong></span>
+            <span class="demo-slot">🟡 বিকাল ২-৬টা: <strong>সম্ভাব্য</strong></span>
+            <span class="demo-slot">🟢 রাত ৬-১২টা: <strong>বন্ধ নেই</strong></span>
+          </div>
+          <p class="demo-note" id="demoNote">* ডেমো সময়সূচী — বাস্তব সময়সূচী কমিউনিটি রিপোর্টের মাধ্যমে তৈরি হবে</p>
+        </div>
+      </div>
+
+      <!-- Report Buttons -->
+      <div class="report-section">
+        <h3 id="reportTitle">📢 আপনার এলাকায় এখন কী অবস্থা?</h3>
+        <div class="report-buttons">
+          <button class="btn btn-report btn-powercut" onclick="reportPowerCut()">
+            🔌 পাওয়ার কাট
+          </button>
+          <button class="btn btn-report btn-poweron" onclick="reportPowerOn()">
+            💡 পাওয়ার এসেছে
+          </button>
+        </div>
+        <p id="reportFeedback" class="report-feedback hidden"></p>
+      </div>
+
+      <!-- Utility Info -->
+      <div id="utilityInfo" class="utility-info hidden">
+        <h3 id="utilityInfoTitle">ℹ️ সরবরাহকারীর তথ্য</h3>
+        <div id="utilityDetails"></div>
+        <a id="utilityWebsite" href="#" target="_blank" rel="noopener noreferrer" class="utility-link"></a>
+      </div>
+    </section>
+
+    <!-- 🗺️ Quick District Browser -->
+    <section class="card browser-card">
+      <h2 id="browserTitle">🗺️ সব জেলা ব্রাউজ করুন</h2>
+      <div id="divisionAccordion" class="accordion">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ⚡ Footer -->
+  <footer class="footer">
+    <p>⚡ বিদ্যুতজ্ঞান — নির্মিত বাংলাদেশের জন্য</p>
+    <p class="footer-small">ডেটা নির্ভুলতার জন্য সর্বোচ্চ চেষ্টা করা হয়েছে। সরকারি সূত্র থেকে সর্বশেষ তথ্য যাচাই করুন।</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
