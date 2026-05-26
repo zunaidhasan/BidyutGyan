@@ -191,8 +191,23 @@ function toggleTheme() {
 
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
+
+  // Update color-scheme meta tag for system UI integration
+  const meta = document.getElementById('colorSchemeMeta');
+  if (meta) {
+    meta.content = theme === 'dark' ? 'dark' : 'light';
+  }
+
+  // Update theme icon
   const icon = document.getElementById('themeIcon');
   icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+
+  // Add cross-fade transition class for smooth background animation
+  document.body.classList.add('theme-transitioning');
+  clearTimeout(window._themeTransitionTimer);
+  window._themeTransitionTimer = setTimeout(() => {
+    document.body.classList.remove('theme-transitioning');
+  }, 400);
 }
 
 function toggleLang() {
@@ -387,6 +402,28 @@ function renderDistrictInfo(data) {
 
   // Schedule timeline
   renderScheduleTimeline();
+
+  // Upazilas / Sub-districts
+  const upazilaSection = document.getElementById('upazilaSection');
+  if (dist.upazilas && dist.upazilas.length > 0) {
+    const list = document.getElementById('upazilaList');
+    const label = document.getElementById('upazilaLabel');
+    label.textContent = currentLang === 'bn'
+      ? `🏘️ উপজেলা (${dist.total_upazilas})`
+      : `🏘️ Upazilas (${dist.total_upazilas})`;
+
+    list.innerHTML = dist.upazilas
+      .map((u) => `
+        <div class="upazila-item">
+          <span class="upazila-name">${currentLang === 'bn' ? u.name_bn : u.name_en}</span>
+          <span class="upazila-utility">${u.utility}</span>
+        </div>
+      `)
+      .join('');
+    upazilaSection.classList.remove('hidden');
+  } else {
+    upazilaSection.classList.add('hidden');
+  }
 
   // Utility info
   const utilInfo = document.getElementById('utilityInfo');

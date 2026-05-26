@@ -10,6 +10,7 @@ from backend.utility_lookup import (
     get_all_districts,
     get_district_by_slug,
     get_all_divisions,
+    get_upazilas_for_district,
 )
 
 app = FastAPI(
@@ -50,6 +51,7 @@ def api_root():
         },
         "total_districts": len(get_all_districts(utilities_data)),
         "total_divisions": len(get_all_divisions(utilities_data)),
+        "upazilas_supported": True,
     }
 
 
@@ -106,6 +108,26 @@ def lookup_by_coords(
         raise HTTPException(status_code=404, detail="Could not find a nearby district")
 
     return result
+
+
+# ── Upazilas / Sub-Districts ─────────────────────────────────────
+
+
+@app.get("/api/upazilas/{slug}")
+def list_upazilas(slug: str):
+    """List all upazilas (sub-districts) for a given district by slug.
+    Returns upazila names and which utility company serves each."""
+    upazilas = get_upazilas_for_district(slug.lower(), utilities_data)
+    if upazilas is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"District '{slug}' not found or no upazila data available"
+        )
+    return {
+        "district_key": slug,
+        "upazilas": upazilas,
+        "total": len(upazilas),
+    }
 
 
 # ── Utilities Info ────────────────────────────────────────────

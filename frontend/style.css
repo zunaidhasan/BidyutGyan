@@ -877,6 +877,63 @@ body::after {
   transform: translateY(-2px);
 }
 
+/* ── Upazilas / Sub-Districts ─────────────────────────────── */
+.upazila-section {
+  margin-bottom: 1.25rem;
+}
+
+.upazila-section h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.upazila-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.upazila-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--info-item-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xs);
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.upazila-item:hover {
+  border-color: rgba(74, 124, 247, 0.2);
+  transform: translateY(-1px);
+  background: rgba(74, 124, 247, 0.05);
+}
+
+.upazila-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.upazila-utility {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(74, 124, 247, 0.1);
+  color: var(--accent-blue);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(74, 124, 247, 0.1);
+}
+
+@media (max-width: 600px) {
+  .upazila-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Utility Info ──────────────────────────────────────── */
 .utility-info {
   background: var(--info-item-bg);
@@ -1288,6 +1345,23 @@ body::after {
   .info-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ── Theme Cross-Fade Animation ──────────────────────────── */
+/* Applies a brief opacity flash on theme switch to smooth the transition */
+.theme-transitioning body::before,
+.theme-transitioning body::after {
+  transition: opacity 0.3s ease;
+}
+
+body.theme-transitioning {
+  animation: themeFade 0.35s ease;
+}
+
+@keyframes themeFade {
+  0% { opacity: 1; }
+  40% { opacity: 0.85; }
+  100% { opacity: 1; }
 }
 
 /* ── Reduced Motion ─────────────────────────────────────── */

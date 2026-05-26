@@ -9,6 +9,8 @@
       "short_bn": "ডেসকো",
       "type": "urban",
       "website": "https://www.desco.org.bd",
+      "phone": "+880-2-8901100",
+      "helpline": "16116",
       "zones": ["Northern & Eastern Dhaka Metro (Mirpur, Gulshan, Banani, Uttara, Baridhara)", "Tongi", "Parts of Gazipur"]
     },
     "DPDC": {
@@ -17,6 +19,8 @@
       "short_bn": "ডিপিডিসি",
       "type": "urban",
       "website": "https://www.dpdc.org.bd",
+      "phone": "+880-2-9563000",
+      "helpline": "16117",
       "zones": ["Central & Southern Dhaka Metro (Old Dhaka, Motijheel, Lalbagh)", "Narayanganj"]
     },
     "NESCO": {
@@ -25,6 +29,8 @@
       "short_bn": "নেসকো",
       "type": "regional",
       "website": "https://www.nesco.gov.bd",
+      "phone": "+880-721-770077",
+      "helpline": "16224",
       "zones": ["Rajshahi Division", "Rangpur Division"]
     },
     "WZPDCL": {
@@ -33,6 +39,8 @@
       "short_bn": "ওজোপাডিকো",
       "type": "regional",
       "website": "https://www.wzpdcl.gov.bd",
+      "phone": "+880-41-720750",
+      "helpline": "16225",
       "zones": ["Khulna Division", "Barisal Division", "Parts of Faridpur region"]
     },
     "BPDB": {
@@ -41,6 +49,8 @@
       "short_bn": "বিপিডিবি",
       "type": "regional",
       "website": "https://www.bpdb.gov.bd",
+      "phone": "+880-2-9554600",
+      "helpline": "16374",
       "zones": ["Chittagong Division", "Sylhet Division", "Mymensingh Division", "Parts of Comilla", "Parts of Dhaka Division (outside metro)"]
     },
     "BREB": {
@@ -49,8 +59,20 @@
       "short_bn": "ব্রেব/পিবিএস",
       "type": "rural",
       "website": "https://www.breb.gov.bd",
+      "phone": "+880-2-8188100",
+      "helpline": "16223",
       "zones": ["All rural and semi-urban areas nationwide", "Operates through 80 Palli Bidyut Samity (PBS)"],
       "_note": "BREB/PBS operates in EVERY district as the secondary/rural supplier."
+    },
+    "REB": {
+      "name_en": "Rural Electrification Board (PBS)",
+      "name_bn": "পল্লী বিদ্যুৎ সমিতি (পিবিএস)",
+      "short_bn": "পিবিএস",
+      "type": "rural",
+      "website": "https://www.reb.gov.bd",
+      "phone": "+880-2-8188111",
+      "helpline": "16223",
+      "zones": ["All rural areas through 80 Palli Bidyut Samity across all divisions"]
     }
   },
   "divisions": {
@@ -58,15 +80,15 @@
       "name_en": "Dhaka Division",
       "name_bn": "ঢাকা বিভাগ",
       "districts": {
-        "dhaka": { "name_en": "Dhaka", "name_bn": "ঢাকা", "lat": 23.8103, "lon": 90.4125, "utilities": ["DESCO", "DPDC"], "primary": "DESCO (North/East), DPDC (South/Central)", "note": "Northern parts (Mirpur, Gulshan, Uttara) under DESCO; Southern parts (Old Dhaka, Motijheel) under DPDC" },
+        "dhaka": { "name_en": "Dhaka", "name_bn": "ঢাকা", "lat": 23.8103, "lon": 90.4125, "utilities": ["DESCO", "DPDC"], "primary": "DESCO (North/East), DPDC (South/Central)", "note": "Northern parts (Mirpur, Gulshan, Uttara) under DESCO; Southern parts (Old Dhaka, Motijheel) under DPDC", "upazilas": [{"name_en": "Adabar", "name_bn": "আদাবর", "utility": "DESCO"}, {"name_en": "Badda", "name_bn": "বাড্ডা", "utility": "DESCO"}, {"name_en": "Bangshal", "name_bn": "বংশাল", "utility": "DPDC"}, {"name_en": "Cantonment", "name_bn": "ক্যান্টনমেন্ট", "utility": "DESCO"}, {"name_en": "Chackbazar", "name_bn": "চকবাজার", "utility": "DPDC"}, {"name_en": "Darus Salam", "name_bn": "দারুস সালাম", "utility": "DESCO"}, {"name_en": "Demra", "name_bn": "ডেমরা", "utility": "DPDC"}, {"name_en": "Dhamrai", "name_bn": "ধামরাই", "utility": "DESCO"}, {"name_en": "Dhanmondi", "name_bn": "ধানমন্ডি", "utility": "DPDC"}, {"name_en": "Gendaria", "name_bn": "গেন্ডারিয়া", "utility": "DPDC"}, {"name_en": "Gulshan", "name_bn": "গুলশান", "utility": "DESCO"}, {"name_en": "Hazaribagh", "name_bn": "হাজারীবাগ", "utility": "DPDC"}, {"name_en": "Jatrabari", "name_bn": "যাত্রাবাড়ী", "utility": "DPDC"}, {"name_en": "Kafrul", "name_bn": "কাফরুল", "utility": "DESCO"}, {"name_en": "Kalabagan", "name_bn": "কলাবাগান", "utility": "DPDC"}, {"name_en": "Kamrangirchar", "name_bn": "কামরাঙ্গীরচর", "utility": "DPDC"}, {"name_en": "Keraniganj", "name_bn": "কেরানীগঞ্জ", "utility": "DPDC"}, {"name_en": "Khilgaon", "name_bn": "খিলগাঁও", "utility": "DESCO"}, {"name_en": "Khilkhet", "name_bn": "খিলক্ষেত", "utility": "DESCO"}, {"name_en": "Lalbagh", "name_bn": "লালবাগ", "utility": "DPDC"}, {"name_en": "Mirpur", "name_bn": "মিরপুর", "utility": "DESCO"}, {"name_en": "Mohammadpur", "name_bn": "মোহাম্মদপুর", "utility": "DESCO"}, {"name_en": "Motijheel", "name_bn": "মতিঝিল", "utility": "DPDC"}, {"name_en": "Nawabganj", "name_bn": "নবাবগঞ্জ", "utility": "BPDB"}, {"name_en": "New Market", "name_bn": "নিউ মার্কেট", "utility": "DPDC"}, {"name_en": "Pallabi", "name_bn": "পল্লবী", "utility": "DESCO"}, {"name_en": "Paltan", "name_bn": "পল্টন", "utility": "DPDC"}, {"name_en": "Ramna", "name_bn": "রমনা", "utility": "DPDC"}, {"name_en": "Rampura", "name_bn": "রামপুরা", "utility": "DESCO"}, {"name_en": "Rayerbazar", "name_bn": "রায়েরবাজার", "utility": "DPDC"}, {"name_en": "Sabujbagh", "name_bn": "সবুজবাগ", "utility": "DESCO"}, {"name_en": "Savar", "name_bn": "সাভার", "utility": "DESCO"}, {"name_en": "Shah Ali", "name_bn": "শাহ আলী", "utility": "DESCO"}, {"name_en": "Shahbagh", "name_bn": "শাহবাগ", "utility": "DPDC"}, {"name_en": "Sher-e-Bangla Nagar", "name_bn": "শেরেবাংলা নগর", "utility": "DESCO"}, {"name_en": "Shyampur", "name_bn": "শ্যামপুর", "utility": "DPDC"}, {"name_en": "Sutrapur", "name_bn": "সুত্রাপুর", "utility": "DPDC"}, {"name_en": "Tejgaon", "name_bn": "তেজগাঁও", "utility": "DESCO"}, {"name_en": "Tejgaon Industrial Area", "name_bn": "তেজগাঁও শিল্প এলাকা", "utility": "DESCO"}, {"name_en": "Turag", "name_bn": "তুরাগ", "utility": "DESCO"}, {"name_en": "Uttara", "name_bn": "উত্তরা", "utility": "DESCO"}, {"name_en": "Uttarkhan", "name_bn": "উত্তরখান", "utility": "DESCO"}] },
         "faridpur": { "name_en": "Faridpur", "name_bn": "ফরিদপুর", "lat": 23.6000, "lon": 89.8300, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
-        "gazipur": { "name_en": "Gazipur", "name_bn": "গাজীপুর", "lat": 24.0000, "lon": 90.4100, "utilities": ["DESCO", "BPDB"], "primary": "DESCO (urban parts), BPDB (remaining)", "note": "Industrial areas under DESCO" },
+        "gazipur": { "name_en": "Gazipur", "name_bn": "গাজীপুর", "lat": 24.0000, "lon": 90.4100, "utilities": ["DESCO", "BPDB"], "primary": "DESCO (urban parts), BPDB (remaining)", "note": "Industrial areas under DESCO", "upazilas": [{"name_en": "Gazipur Sadar", "name_bn": "গাজীপুর সদর", "utility": "DESCO"}, {"name_en": "Kaliakair", "name_bn": "কালিয়াকৈর", "utility": "DESCO"}, {"name_en": "Kaliganj", "name_bn": "কালীগঞ্জ", "utility": "BPDB"}, {"name_en": "Kapasia", "name_bn": "কাপাসিয়া", "utility": "BPDB"}, {"name_en": "Sreepur", "name_bn": "শ্রীপুর", "utility": "BPDB"}, {"name_en": "Tongi", "name_bn": "টঙ্গী", "utility": "DESCO"}] },
         "gopalganj": { "name_en": "Gopalganj", "name_bn": "গোপালগঞ্জ", "lat": 23.0100, "lon": 89.8200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
         "kishoreganj": { "name_en": "Kishoreganj", "name_bn": "কিশোরগঞ্জ", "lat": 24.4400, "lon": 90.7800, "utilities": ["BPDB"], "primary": "BPDB" },
         "madaripur": { "name_en": "Madaripur", "name_bn": "মাদারীপুর", "lat": 23.1600, "lon": 90.1900, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
         "manikganj": { "name_en": "Manikganj", "name_bn": "মানিকগঞ্জ", "lat": 23.8600, "lon": 90.0000, "utilities": ["BPDB"], "primary": "BPDB" },
         "munshiganj": { "name_en": "Munshiganj", "name_bn": "মুন্সীগঞ্জ", "lat": 23.5400, "lon": 90.5300, "utilities": ["BPDB"], "primary": "BPDB" },
-        "narayanganj": { "name_en": "Narayanganj", "name_bn": "নারায়ণগঞ্জ", "lat": 23.6200, "lon": 90.5000, "utilities": ["DPDC"], "primary": "DPDC" },
+        "narayanganj": { "name_en": "Narayanganj", "name_bn": "নারায়ণগঞ্জ", "lat": 23.6200, "lon": 90.5000, "utilities": ["DPDC"], "primary": "DPDC", "upazilas": [{"name_en": "Araihazar", "name_bn": "আড়াইহাজার", "utility": "BPDB"}, {"name_en": "Bandar", "name_bn": "বন্দর", "utility": "DPDC"}, {"name_en": "Narayanganj Sadar", "name_bn": "নারায়ণগঞ্জ সদর", "utility": "DPDC"}, {"name_en": "Rupganj", "name_bn": "রূপগঞ্জ", "utility": "DPDC"}, {"name_en": "Sonargaon", "name_bn": "সোনারগাঁও", "utility": "BPDB"}] },
         "narsingdi": { "name_en": "Narsingdi", "name_bn": "নরসিংদী", "lat": 23.9200, "lon": 90.7200, "utilities": ["BPDB"], "primary": "BPDB" },
         "rajbari": { "name_en": "Rajbari", "name_bn": "রাজবাড়ী", "lat": 23.7500, "lon": 89.6500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
         "shariatpur": { "name_en": "Shariatpur", "name_bn": "শরীয়তপুর", "lat": 23.2300, "lon": 90.3500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
@@ -80,9 +102,9 @@
         "bandarban": { "name_en": "Bandarban", "name_bn": "বান্দরবান", "lat": 22.1900, "lon": 92.2200, "utilities": ["BPDB"], "primary": "BPDB" },
         "brahmanbaria": { "name_en": "Brahmanbaria", "name_bn": "ব্রাহ্মণবাড়িয়া", "lat": 23.9600, "lon": 91.1200, "utilities": ["BPDB"], "primary": "BPDB" },
         "chandpur": { "name_en": "Chandpur", "name_bn": "চাঁদপুর", "lat": 23.2300, "lon": 90.6500, "utilities": ["BPDB"], "primary": "BPDB" },
-        "chattogram": { "name_en": "Chattogram", "name_bn": "চট্টগ্রাম", "lat": 22.3600, "lon": 91.8200, "utilities": ["BPDB"], "primary": "BPDB" },
+        "chattogram": { "name_en": "Chattogram", "name_bn": "চট্টগ্রাম", "lat": 22.3600, "lon": 91.8200, "utilities": ["BPDB"], "primary": "BPDB", "upazilas": [{"name_en": "Anwara", "name_bn": "আনোয়ারা", "utility": "BPDB"}, {"name_en": "Banshkhali", "name_bn": "বাঁশখালী", "utility": "BPDB"}, {"name_en": "Boalkhali", "name_bn": "বোয়ালখালী", "utility": "BPDB"}, {"name_en": "Chandanaish", "name_bn": "চন্দনাইশ", "utility": "BPDB"}, {"name_en": "Double Mooring", "name_bn": "ডবলমুরিং", "utility": "BPDB"}, {"name_en": "Fatikchhari", "name_bn": "ফটিকছড়ি", "utility": "BPDB"}, {"name_en": "Hathazari", "name_bn": "হাটহাজারী", "utility": "BPDB"}, {"name_en": "Kotwali", "name_bn": "কোতোয়ালী", "utility": "BPDB"}, {"name_en": "Lohagara", "name_bn": "লোহাগাড়া", "utility": "BPDB"}, {"name_en": "Mirsharai", "name_bn": "মীরসরাই", "utility": "BPDB"}, {"name_en": "Patiya", "name_bn": "পটিয়া", "utility": "BPDB"}, {"name_en": "Rangunia", "name_bn": "রাঙ্গুনিয়া", "utility": "BPDB"}, {"name_en": "Raozan", "name_bn": "রাউজান", "utility": "BPDB"}, {"name_en": "Sandwip", "name_bn": "সন্দ্বীপ", "utility": "BPDB"}, {"name_en": "Satkania", "name_bn": "সাতকানিয়া", "utility": "BPDB"}, {"name_en": "Sitakunda", "name_bn": "সীতাকুণ্ড", "utility": "BPDB"}] },
         "coxsbazar": { "name_en": "Cox's Bazar", "name_bn": "কক্সবাজার", "lat": 21.4300, "lon": 91.9800, "utilities": ["BPDB"], "primary": "BPDB" },
-        "cumilla": { "name_en": "Cumilla", "name_bn": "কুমিল্লা", "lat": 23.4570, "lon": 91.1780, "utilities": ["BPDB"], "primary": "BPDB" },
+        "cumilla": { "name_en": "Cumilla", "name_bn": "কুমিল্লা", "lat": 23.4570, "lon": 91.1780, "utilities": ["BPDB"], "primary": "BPDB", "upazilas": [{"name_en": "Barura", "name_bn": "বরুরা", "utility": "BPDB"}, {"name_en": "Brahmanpara", "name_bn": "ব্রাহ্মণপাড়া", "utility": "BPDB"}, {"name_en": "Burichang", "name_bn": "বুড়িচং", "utility": "BPDB"}, {"name_en": "Chandina", "name_bn": "চান্দিনা", "utility": "BPDB"}, {"name_en": "Chauddagram", "name_bn": "চৌদ্দগ্রাম", "utility": "BPDB"}, {"name_en": "Cumilla Adarsha Sadar", "name_bn": "কুমিল্লা আদর্শ সদর", "utility": "BPDB"}, {"name_en": "Cumilla Sadar Dakshin", "name_bn": "কুমিল্লা সদর দক্ষিণ", "utility": "BPDB"}, {"name_en": "Daudkandi", "name_bn": "দাউদকান্দি", "utility": "BPDB"}, {"name_en": "Debidwar", "name_bn": "দেবীদ্বার", "utility": "BPDB"}, {"name_en": "Homna", "name_bn": "হোমনা", "utility": "BPDB"}, {"name_en": "Laksam", "name_bn": "লাকসাম", "utility": "BPDB"}, {"name_en": "Lalmai", "name_bn": "লালমাই", "utility": "BPDB"}, {"name_en": "Meghna", "name_bn": "মেঘনা", "utility": "BPDB"}, {"name_en": "Monoharganj", "name_bn": "মনোহরগঞ্জ", "utility": "BPDB"}, {"name_en": "Muradnagar", "name_bn": "মুরাদনগর", "utility": "BPDB"}, {"name_en": "Nangalkot", "name_bn": "নাঙ্গলকোট", "utility": "BPDB"}, {"name_en": "Titas", "name_bn": "তিতাস", "utility": "BPDB"}] },
         "feni": { "name_en": "Feni", "name_bn": "ফেনী", "lat": 23.0100, "lon": 91.3900, "utilities": ["BPDB"], "primary": "BPDB" },
         "khagrachari": { "name_en": "Khagrachari", "name_bn": "খাগড়াছড়ি", "lat": 23.1200, "lon": 91.9700, "utilities": ["BPDB"], "primary": "BPDB" },
         "lakshmipur": { "name_en": "Lakshmipur", "name_bn": "লক্ষ্মীপুর", "lat": 22.9400, "lon": 90.8300, "utilities": ["BPDB"], "primary": "BPDB" },
@@ -94,13 +116,13 @@
       "name_en": "Rajshahi Division",
       "name_bn": "রাজশাহী বিভাগ",
       "districts": {
-        "bogura": { "name_en": "Bogura", "name_bn": "বগুড়া", "lat": 24.8510, "lon": 89.3700, "utilities": ["NESCO"], "primary": "NESCO" },
+        "bogura": { "name_en": "Bogura", "name_bn": "বগুড়া", "lat": 24.8510, "lon": 89.3700, "utilities": ["NESCO"], "primary": "NESCO", "upazilas": [{"name_en": "Adamdighi", "name_bn": "আদমদীঘি", "utility": "NESCO"}, {"name_en": "Bogura Sadar", "name_bn": "বগুড়া সদর", "utility": "NESCO"}, {"name_en": "Dhunat", "name_bn": "ধুনট", "utility": "NESCO"}, {"name_en": "Dhupchanchia", "name_bn": "ধুপচাঁচিয়া", "utility": "NESCO"}, {"name_en": "Gabtali", "name_bn": "গাবতলী", "utility": "NESCO"}, {"name_en": "Kahaloo", "name_bn": "কাহালু", "utility": "NESCO"}, {"name_en": "Nandigram", "name_bn": "নন্দীগ্রাম", "utility": "NESCO"}, {"name_en": "Sariakandi", "name_bn": "সারিয়াকান্দি", "utility": "NESCO"}, {"name_en": "Shajahanpur", "name_bn": "শাজাহানপুর", "utility": "NESCO"}, {"name_en": "Sherpur", "name_bn": "শেরপুর", "utility": "NESCO"}, {"name_en": "Shibganj", "name_bn": "শিবগঞ্জ", "utility": "NESCO"}, {"name_en": "Sonatala", "name_bn": "সোনাতলা", "utility": "NESCO"}] },
         "chapainawabganj": { "name_en": "Chapai Nawabganj", "name_bn": "চাঁপাইনবাবগঞ্জ", "lat": 24.5900, "lon": 88.2700, "utilities": ["NESCO"], "primary": "NESCO" },
         "joypurhat": { "name_en": "Joypurhat", "name_bn": "জয়পুরহাট", "lat": 25.1000, "lon": 89.0200, "utilities": ["NESCO"], "primary": "NESCO" },
         "naogaon": { "name_en": "Naogaon", "name_bn": "নওগাঁ", "lat": 24.8000, "lon": 88.9300, "utilities": ["NESCO"], "primary": "NESCO" },
         "natore": { "name_en": "Natore", "name_bn": "নাটোর", "lat": 24.4100, "lon": 89.0100, "utilities": ["NESCO"], "primary": "NESCO" },
         "pabna": { "name_en": "Pabna", "name_bn": "পাবনা", "lat": 24.0000, "lon": 89.2500, "utilities": ["NESCO"], "primary": "NESCO" },
-        "rajshahi": { "name_en": "Rajshahi", "name_bn": "রাজশাহী", "lat": 24.3740, "lon": 88.6010, "utilities": ["NESCO"], "primary": "NESCO" },
+        "rajshahi": { "name_en": "Rajshahi", "name_bn": "রাজশাহী", "lat": 24.3740, "lon": 88.6010, "utilities": ["NESCO"], "primary": "NESCO", "upazilas": [{"name_en": "Bagha", "name_bn": "বাঘা", "utility": "NESCO"}, {"name_en": "Bagmara", "name_bn": "বাগমারা", "utility": "NESCO"}, {"name_en": "Boalia", "name_bn": "বোয়ালিয়া", "utility": "NESCO"}, {"name_en": "Charghat", "name_bn": "চারঘাট", "utility": "NESCO"}, {"name_en": "Durgapur", "name_bn": "দুর্গাপুর", "utility": "NESCO"}, {"name_en": "Godagari", "name_bn": "গোদাগাড়ী", "utility": "NESCO"}, {"name_en": "Mohanpur", "name_bn": "মোহনপুর", "utility": "NESCO"}, {"name_en": "Motihar", "name_bn": "মতিহার", "utility": "NESCO"}, {"name_en": "Paba", "name_bn": "পবা", "utility": "NESCO"}, {"name_en": "Putnia", "name_bn": "পুঠিয়া", "utility": "NESCO"}, {"name_en": "Rajpara", "name_bn": "রাজপাড়া", "utility": "NESCO"}, {"name_en": "Shahmakhdum", "name_bn": "শাহমখদুম", "utility": "NESCO"}, {"name_en": "Tanore", "name_bn": "তানোর", "utility": "NESCO"}] },
         "sirajganj": { "name_en": "Sirajganj", "name_bn": "সিরাজগঞ্জ", "lat": 24.4500, "lon": 89.7000, "utilities": ["NESCO"], "primary": "NESCO" }
       }
     },
@@ -110,9 +132,9 @@
       "districts": {
         "bagerhat": { "name_en": "Bagerhat", "name_bn": "বাগেরহাট", "lat": 22.6600, "lon": 89.7900, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
         "chuadanga": { "name_en": "Chuadanga", "name_bn": "চুয়াডাঙ্গা", "lat": 23.6400, "lon": 88.8500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
-        "jashore": { "name_en": "Jashore", "name_bn": "যশোর", "lat": 23.1700, "lon": 89.2200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "jashore": { "name_en": "Jashore", "name_bn": "যশোর", "lat": 23.1700, "lon": 89.2200, "utilities": ["WZPDCL"], "primary": "WZPDCL", "upazilas": [{"name_en": "Abhaynagar", "name_bn": "অভয়নগর", "utility": "WZPDCL"}, {"name_en": "Bagherpara", "name_bn": "বাঘেরপাড়া", "utility": "WZPDCL"}, {"name_en": "Chaugachha", "name_bn": "চৌগাছা", "utility": "WZPDCL"}, {"name_en": "Jashore Sadar", "name_bn": "যশোর সদর", "utility": "WZPDCL"}, {"name_en": "Jhikargachha", "name_bn": "ঝিকরগাছা", "utility": "WZPDCL"}, {"name_en": "Keshabpur", "name_bn": "কেশবপুর", "utility": "WZPDCL"}, {"name_en": "Manirampur", "name_bn": "মণিরামপুর", "utility": "WZPDCL"}, {"name_en": "Sharsha", "name_bn": "শার্শা", "utility": "WZPDCL"}] },
         "jhenaidah": { "name_en": "Jhenaidah", "name_bn": "ঝিনাইদহ", "lat": 23.5400, "lon": 89.1700, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
-        "khulna": { "name_en": "Khulna", "name_bn": "খুলনা", "lat": 22.8450, "lon": 89.5400, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "khulna": { "name_en": "Khulna", "name_bn": "খুলনা", "lat": 22.8450, "lon": 89.5400, "utilities": ["WZPDCL"], "primary": "WZPDCL", "upazilas": [{"name_en": "Batiaghata", "name_bn": "বটিয়াঘাটা", "utility": "WZPDCL"}, {"name_en": "Dacope", "name_bn": "ডাকোপ", "utility": "WZPDCL"}, {"name_en": "Daulatpur", "name_bn": "দৌলতপুর", "utility": "WZPDCL"}, {"name_en": "Dighalia", "name_bn": "ডিঘলিয়া", "utility": "WZPDCL"}, {"name_en": "Dumuria", "name_bn": "ডুমুরিয়া", "utility": "WZPDCL"}, {"name_en": "Khalishpur", "name_bn": "খালিশপুর", "utility": "WZPDCL"}, {"name_en": "Khan Jahan Ali", "name_bn": "খান জাহান আলী", "utility": "WZPDCL"}, {"name_en": "Kotwali", "name_bn": "কোতোয়ালী", "utility": "WZPDCL"}, {"name_en": "Koyra", "name_bn": "কয়রা", "utility": "WZPDCL"}, {"name_en": "Paikgachha", "name_bn": "পাইকগাছা", "utility": "WZPDCL"}, {"name_en": "Phultala", "name_bn": "ফুলতলা", "utility": "WZPDCL"}, {"name_en": "Rupsha", "name_bn": "রূপসা", "utility": "WZPDCL"}, {"name_en": "Sonadanga", "name_bn": "সোনাডাঙ্গা", "utility": "WZPDCL"}, {"name_en": "Terokhada", "name_bn": "তেরোখাদা", "utility": "WZPDCL"}] },
         "kushtia": { "name_en": "Kushtia", "name_bn": "কুষ্টিয়া", "lat": 23.9000, "lon": 89.1200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
         "magura": { "name_en": "Magura", "name_bn": "মাগুরা", "lat": 23.4900, "lon": 89.4200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
         "meherpur": { "name_en": "Meherpur", "name_bn": "মেহেরপুর", "lat": 23.7600, "lon": 88.6300, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
@@ -125,7 +147,7 @@
       "name_bn": "বরিশাল বিভাগ",
       "districts": {
         "barguna": { "name_en": "Barguna", "name_bn": "বরগুনা", "lat": 22.1500, "lon": 90.1200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
-        "barisal": { "name_en": "Barisal", "name_bn": "বরিশাল", "lat": 22.7000, "lon": 90.3500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
+        "barisal": { "name_en": "Barisal", "name_bn": "বরিশাল", "lat": 22.7000, "lon": 90.3500, "utilities": ["WZPDCL"], "primary": "WZPDCL", "upazilas": [{"name_en": "Agailjhara", "name_bn": "আগৈলঝাড়া", "utility": "WZPDCL"}, {"name_en": "Babuganj", "name_bn": "বাবুগঞ্জ", "utility": "WZPDCL"}, {"name_en": "Bakerganj", "name_bn": "বাকেরগঞ্জ", "utility": "WZPDCL"}, {"name_en": "Barisal Sadar", "name_bn": "বরিশাল সদর", "utility": "WZPDCL"}, {"name_en": "Banaripara", "name_bn": "বানারীপাড়া", "utility": "WZPDCL"}, {"name_en": "Gournadi", "name_bn": "গৌরনদী", "utility": "WZPDCL"}, {"name_en": "Hizla", "name_bn": "হিজলা", "utility": "WZPDCL"}, {"name_en": "Mehendiganj", "name_bn": "মেহেন্দিগঞ্জ", "utility": "WZPDCL"}, {"name_en": "Muladi", "name_bn": "মুলাদী", "utility": "WZPDCL"}, {"name_en": "Wazirpur", "name_bn": "ওয়াজিরপুর", "utility": "WZPDCL"}] },
         "bhola": { "name_en": "Bhola", "name_bn": "ভোলা", "lat": 22.6800, "lon": 90.6500, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
         "jhalokati": { "name_en": "Jhalokati", "name_bn": "ঝালকাঠি", "lat": 22.6400, "lon": 90.2000, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
         "patuakhali": { "name_en": "Patuakhali", "name_bn": "পটুয়াখালী", "lat": 22.3500, "lon": 90.3200, "utilities": ["WZPDCL"], "primary": "WZPDCL" },
@@ -139,7 +161,7 @@
         "habiganj": { "name_en": "Habiganj", "name_bn": "হবিগঞ্জ", "lat": 24.3700, "lon": 91.4100, "utilities": ["BPDB"], "primary": "BPDB" },
         "moulvibazar": { "name_en": "Moulvibazar", "name_bn": "মৌলভীবাজার", "lat": 24.4800, "lon": 91.7700, "utilities": ["BPDB"], "primary": "BPDB" },
         "sunamganj": { "name_en": "Sunamganj", "name_bn": "সুনামগঞ্জ", "lat": 25.0700, "lon": 91.4000, "utilities": ["BPDB"], "primary": "BPDB" },
-        "sylhet": { "name_en": "Sylhet", "name_bn": "সিলেট", "lat": 24.8940, "lon": 91.8690, "utilities": ["BPDB"], "primary": "BPDB" }
+        "sylhet": { "name_en": "Sylhet", "name_bn": "সিলেট", "lat": 24.8940, "lon": 91.8690, "utilities": ["BPDB"], "primary": "BPDB", "upazilas": [{"name_en": "Balaganj", "name_bn": "বালাগঞ্জ", "utility": "BPDB"}, {"name_en": "Beanibazar", "name_bn": "বিয়ানীবাজার", "utility": "BPDB"}, {"name_en": "Bishwanath", "name_bn": "বিশ্বনাথ", "utility": "BPDB"}, {"name_en": "Companiganj", "name_bn": "কোম্পানীগঞ্জ", "utility": "BPDB"}, {"name_en": "Dakshin Surma", "name_bn": "দক্ষিণ সুরমা", "utility": "BPDB"}, {"name_en": "Fenchuganj", "name_bn": "ফেঞ্চুগঞ্জ", "utility": "BPDB"}, {"name_en": "Golapganj", "name_bn": "গোলাপগঞ্জ", "utility": "BPDB"}, {"name_en": "Gowainghat", "name_bn": "গোয়াইনঘাট", "utility": "BPDB"}, {"name_en": "Jaintiapur", "name_bn": "জৈন্তাপুর", "utility": "BPDB"}, {"name_en": "Kanaighat", "name_bn": "কানাইঘাট", "utility": "BPDB"}, {"name_en": "Osmani Nagar", "name_bn": "ওসমানী নগর", "utility": "BPDB"}, {"name_en": "Sylhet Sadar", "name_bn": "সিলেট সদর", "utility": "BPDB"}, {"name_en": "Zakiganj", "name_bn": "জকিগঞ্জ", "utility": "BPDB"}] }
       }
     },
     "rangpur": {
@@ -152,7 +174,7 @@
         "lalmonirhat": { "name_en": "Lalmonirhat", "name_bn": "লালমনিরহাট", "lat": 25.9000, "lon": 89.4500, "utilities": ["NESCO"], "primary": "NESCO" },
         "nilphamari": { "name_en": "Nilphamari", "name_bn": "নীলফামারী", "lat": 25.9300, "lon": 88.8500, "utilities": ["NESCO"], "primary": "NESCO" },
         "panchagarh": { "name_en": "Panchagarh", "name_bn": "পঞ্চগড়", "lat": 26.3400, "lon": 88.5600, "utilities": ["NESCO"], "primary": "NESCO" },
-        "rangpur": { "name_en": "Rangpur", "name_bn": "রংপুর", "lat": 25.7440, "lon": 89.2540, "utilities": ["NESCO"], "primary": "NESCO" },
+        "rangpur": { "name_en": "Rangpur", "name_bn": "রংপুর", "lat": 25.7440, "lon": 89.2540, "utilities": ["NESCO"], "primary": "NESCO", "upazilas": [{"name_en": "Badarganj", "name_bn": "বদরগঞ্জ", "utility": "NESCO"}, {"name_en": "Gangachara", "name_bn": "গঙ্গাচড়া", "utility": "NESCO"}, {"name_en": "Kaunia", "name_bn": "কাউনিয়া", "utility": "NESCO"}, {"name_en": "Mithapukur", "name_bn": "মিঠাপুকুর", "utility": "NESCO"}, {"name_en": "Pirgachha", "name_bn": "পীরগাছা", "utility": "NESCO"}, {"name_en": "Rangpur Sadar", "name_bn": "রংপুর সদর", "utility": "NESCO"}, {"name_en": "Taraganj", "name_bn": "তারাগঞ্জ", "utility": "NESCO"}] },
         "thakurgaon": { "name_en": "Thakurgaon", "name_bn": "ঠাকুরগাঁও", "lat": 26.0300, "lon": 88.4700, "utilities": ["NESCO"], "primary": "NESCO" }
       }
     },
@@ -161,7 +183,7 @@
       "name_bn": "ময়মনসিংহ বিভাগ",
       "districts": {
         "jamalpur": { "name_en": "Jamalpur", "name_bn": "জামালপুর", "lat": 24.9200, "lon": 89.9500, "utilities": ["BPDB"], "primary": "BPDB" },
-        "mymensingh": { "name_en": "Mymensingh", "name_bn": "ময়মনসিংহ", "lat": 24.7480, "lon": 90.4030, "utilities": ["BPDB"], "primary": "BPDB" },
+        "mymensingh": { "name_en": "Mymensingh", "name_bn": "ময়মনসিংহ", "lat": 24.7480, "lon": 90.4030, "utilities": ["BPDB"], "primary": "BPDB", "upazilas": [{"name_en": "Bhaluka", "name_bn": "ভালুকা", "utility": "BPDB"}, {"name_en": "Dhobaura", "name_bn": "ধোবাউড়া", "utility": "BPDB"}, {"name_en": "Fulbaria", "name_bn": "ফুলবাড়িয়া", "utility": "BPDB"}, {"name_en": "Gaffargaon", "name_bn": "গফরগাঁও", "utility": "BPDB"}, {"name_en": "Gauripur", "name_bn": "গৌরীপুর", "utility": "BPDB"}, {"name_en": "Haluaghat", "name_bn": "হালুয়াঘাট", "utility": "BPDB"}, {"name_en": "Ishwarganj", "name_bn": "ঈশ্বরগঞ্জ", "utility": "BPDB"}, {"name_en": "Mymensingh Sadar", "name_bn": "ময়মনসিংহ সদর", "utility": "BPDB"}, {"name_en": "Muktagachha", "name_bn": "মুক্তাগাছা", "utility": "BPDB"}, {"name_en": "Nandail", "name_bn": "নান্দাইল", "utility": "BPDB"}, {"name_en": "Phulpur", "name_bn": "ফুলপুর", "utility": "BPDB"}, {"name_en": "Trishal", "name_bn": "ত্রিশাল", "utility": "BPDB"}] },
         "netrokona": { "name_en": "Netrokona", "name_bn": "নেত্রকোণা", "lat": 24.8700, "lon": 90.7300, "utilities": ["BPDB"], "primary": "BPDB" },
         "sherpur": { "name_en": "Sherpur", "name_bn": "শেরপুর", "lat": 25.0200, "lon": 90.0200, "utilities": ["BPDB"], "primary": "BPDB" }
       }
