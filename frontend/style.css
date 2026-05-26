@@ -1573,7 +1573,328 @@ body::after {
   }
 }
 
-/* ── Theme Cross-Fade Animation ──────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   Tab Navigation
+   ═══════════════════════════════════════════════════════════ */
+.tab-nav {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 0.5rem;
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  background: rgba(74, 124, 247, 0.06);
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: rgba(74, 124, 247, 0.1);
+  border-color: rgba(74, 124, 247, 0.2);
+  color: var(--accent-blue);
+  box-shadow: 0 0 15px rgba(74, 124, 247, 0.05);
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Map View
+   ═══════════════════════════════════════════════════════════ */
+.map-card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.map-container {
+  width: 100%;
+  height: 450px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  z-index: 1;
+  position: relative;
+}
+
+/* Leaflet overrides for dark/light theme */
+.leaflet-container {
+  font-family: inherit !important;
+}
+
+[data-theme="dark"] .leaflet-container {
+  filter: invert(0.9) hue-rotate(180deg);
+}
+
+[data-theme="dark"] .leaflet-control-zoom a {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border-color: var(--glass-border);
+}
+
+[data-theme="dark"] .leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.6);
+  color: #999;
+}
+
+[data-theme="dark"] .leaflet-control-attribution a {
+  color: #ccc;
+}
+
+.map-tooltip {
+  background: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-xs) !important;
+  padding: 4px 10px !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.map-tooltip::before {
+  border-top-color: var(--card-bg) !important;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: var(--info-item-bg);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--glass-border);
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Utility Comparison Table
+   ═══════════════════════════════════════════════════════════ */
+.compare-card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.compare-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 700px;
+}
+
+.compare-table thead th {
+  padding: 0.8rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  background: var(--accordion-item-bg);
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--glass-border);
+  white-space: nowrap;
+}
+
+.compare-table thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--card-bg);
+  min-width: 90px;
+}
+
+.compare-table tbody td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.compare-table tbody tr:hover td {
+  background: rgba(74, 124, 247, 0.03);
+}
+
+.compare-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.compare-row-label {
+  font-weight: 600;
+  color: var(--text-primary) !important;
+  position: sticky;
+  left: 0;
+  background: var(--card-bg);
+  min-width: 90px;
+  font-size: 0.8rem;
+  z-index: 1;
+}
+
+.compare-link {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  word-break: break-all;
+}
+
+.compare-link:hover {
+  color: #6b9cff;
+  text-decoration: underline;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Community Reports
+   ═══════════════════════════════════════════════════════════ */
+.upazila-detail-reports {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.upazila-reports-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.reports-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.report-indicator {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.report-indicator.cut {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--accent-red);
+}
+
+.report-indicator.on {
+  background: rgba(52, 211, 153, 0.12);
+  color: var(--accent-green);
+}
+
+.upazila-reports-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.upazila-reports-actions .btn-report {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+.upazila-reports-history {
+  max-height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.report-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: var(--radius-xs);
+  background: var(--info-item-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.report-entry.report-cut {
+  border-left: 2px solid var(--accent-red);
+}
+
+.report-entry.report-on {
+  border-left: 2px solid var(--accent-green);
+}
+
+.report-time {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  margin-left: auto;
+}
+
+.report-note {
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 0.7rem;
+}
+
+.no-reports {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Theme Cross-Fade Animation
+   ═══════════════════════════════════════════════════════════ */
 /* Applies a brief opacity flash on theme switch to smooth the transition */
 .theme-transitioning body::before,
 .theme-transitioning body::after {

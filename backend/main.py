@@ -4,6 +4,14 @@ from fastapi import FastAPI, Query, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from backend.config import settings
+import json
+import time
+
+from fastapi import FastAPI, Query, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+
+from backend.config import settings
 from backend.utility_lookup import (
     find_district_by_coords,
     find_district_by_name,
@@ -151,6 +159,125 @@ def health_check():
         "app": settings.app_name,
         "version": settings.app_version,
         "demo_mode": settings.demo_mode,
+    }
+
+
+# ── Community Power Reports (In-Memory Storage) ─────────────────
+
+REPORTS_FILE = settings.base_dir / "backend" / "data" / "power_reports.json"
+
+
+def _load_reports() -> dict:
+    """Load reports from disk, or return empty dict if not found."""
+    try:
+        with open(REPORTS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def _save_reports(reports: dict):
+    """Persist reports to disk."""
+    with open(REPORTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(reports, f, indent=2, ensure_ascii=False)
+
+
+from pydantic import BaseModel
+
+class ReportSubmission(BaseModel):
+    upazila: str
+    district: str
+    status: str  # 'cut' or 'on'
+    note: str = ""
+
+
+@app.post("/api/reports")
+def submit_report(report: ReportSubmission):
+    """Submit a community power report for an upazila."""
+    upazila = report.upazila
+    district = report.district
+    status = report.status
+    note = report.note
+
+    reports = _load_reports()
+    key = f"{district}:{upazila}"
+
+    if key not in reports:
+        reports[key] = {
+            "upazila": upazila,
+            "district": district,
+            "reports": [],
+        }
+
+    reports[key]["reports"].insert(0, {
+        "status": status,
+        "note": note,
+        "timestamp": int(time.time()),
+    })
+
+    # Keep only last 50 reports per upazila
+    reports[key]["reports"] = reports[key]["reports"][:50]
+
+    _save_reports(reports)
+
+    return {
+        "ok": True,
+        "upazila": upazila,
+        "district": district,
+        "total_reports": len(reports[key]["reports"]),
+    }
+
+
+@app.get("/api/reports/{district}")
+def get_district_reports(district: str):
+    """Get all community power reports for a district, grouped by upazila."""
+    reports = _load_reports()
+    prefix = f"{district}:"
+    result = {}
+
+    for key, data in reports.items():
+        if key.startswith(prefix):
+            upazila_name = key[len(prefix):]
+            if data["reports"]:
+                latest = data["reports"][0]
+                last_24h = sum(
+                    1 for r in data["reports"]
+                    if r["timestamp"] > int(time.time()) - 86400
+                )
+                result[upazila_name] = {
+                    "latest_status": latest["status"],
+                    "latest_timestamp": latest["timestamp"],
+                    "total_reports": len(data["reports"]),
+                    "reports_last_24h": last_24h,
+                }
+
+    return {
+        "district": district,
+        "upazilas": result,
+        "total_upazilas_with_reports": len(result),
+    }
+
+
+@app.get("/api/reports/{district}/{upazila}")
+def get_upazila_reports(district: str, upazila: str):
+    """Get recent community reports for a specific upazila."""
+    reports = _load_reports()
+    key = f"{district}:{upazila}"
+    data = reports.get(key)
+
+    if not data or not data["reports"]:
+        return {
+            "upazila": upazila,
+            "district": district,
+            "reports": [],
+            "total": 0,
+        }
+
+    return {
+        "upazila": upazila,
+        "district": district,
+        "reports": data["reports"][:20],
+        "total": len(data["reports"]),
     }
 
 

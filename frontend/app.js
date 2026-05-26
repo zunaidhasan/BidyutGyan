@@ -45,6 +45,29 @@ const STRINGS = {
     typeRural: 'পল্লী',
     langLabel: 'English',
     searching: 'অনুসন্ধান...',
+    tabDistrict: 'জেলা তথ্য',
+    tabMap: 'মানচিত্র',
+    tabCompare: 'তুলনা',
+    mapTitle: '🗺️ বাংলাদেশের ইউটিলিটি মানচিত্র',
+    compareTitle: '📊 ইউটিলিটি কোম্পানির তুলনা',
+    compareRows: {
+      type: 'ধরন',
+      phone: '📞 ফোন',
+      helpline: '📱 হটলাইন',
+      website: '🌐 ওয়েবসাইট',
+      zones: '🏘️ সার্ভিস জোন',
+    },
+    reportSubmitCut: '🔌 পাওয়ার কাট রিপোর্ট করুন',
+    reportSubmitOn: '💡 পাওয়ার ফিরেছে রিপোর্ট করুন',
+    reportSubmitted: 'রিপোর্ট জমা হয়েছে!',
+    reportFailed: 'রিপোর্ট জমা দিতে ব্যর্থ',
+    reportSelectDistrict: 'প্রথমে একটি জেলা নির্বাচন করুন',
+    noUpazilaSelected: 'কোনো উপজেলা নির্বাচন করা হয়নি',
+    recentReports: 'সাম্প্রতিক রিপোর্ট',
+    noReports: 'কোনো রিপোর্ট নেই',
+    hoursAgo: '{h} ঘন্টা আগে',
+    minsAgo: '{m} মিনিট আগে',
+    justNow: 'এইমাত্র',
     upazilaFilterPlaceholder: 'উপজেলা খুঁজুন...',
     upazilaNoResults: 'কোনো উপজেলা পাওয়া যায়নি',
     locationDenied: 'অবস্থান অ্যাক্সেস করতে ব্যর্থ। দয়া করে অবস্থান অনুমতি দিন।',
@@ -87,6 +110,29 @@ const STRINGS = {
     typeRural: 'Rural',
     langLabel: 'বাংলা',
     searching: 'Searching...',
+    tabDistrict: '📍 District Info',
+    tabMap: '🗺️ Map',
+    tabCompare: '📊 Compare',
+    mapTitle: '🗺️ Utility Map of Bangladesh',
+    compareTitle: '📊 Utility Company Comparison',
+    compareRows: {
+      type: 'Type',
+      phone: '📞 Phone',
+      helpline: '📱 Helpline',
+      website: '🌐 Website',
+      zones: '🏘️ Service Zones',
+    },
+    reportSubmitCut: '🔌 Report Power Cut',
+    reportSubmitOn: '💡 Report Power Back',
+    reportSubmitted: 'Report submitted!',
+    reportFailed: 'Failed to submit report',
+    reportSelectDistrict: 'Select a district first',
+    noUpazilaSelected: 'No upazila selected',
+    recentReports: 'Recent Reports',
+    noReports: 'No reports yet',
+    hoursAgo: '{h}h ago',
+    minsAgo: '{m}min ago',
+    justNow: 'Just now',
     upazilaFilterPlaceholder: 'Filter upazilas...',
     upazilaNoResults: 'No upazilas found',
     locationDenied: 'Failed to access location. Please allow location permission.',
@@ -130,6 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize upazila keyboard navigation
   initUpazilaKeyboardNav();
+
+  // Initialize map
+  if (typeof L !== 'undefined') {
+    initMap();
+  }
 });
 
 // ── Toast Notification System ────────────────────────────
@@ -267,11 +318,28 @@ function updateUILanguage() {
   }
   document.getElementById('upazilaNoResults').textContent = s.upazilaNoResults;
 
+  // Update tab labels
+  document.getElementById('tabLabelDistrict').textContent = s.tabDistrict;
+  document.getElementById('tabLabelMap').textContent = s.tabMap;
+  document.getElementById('tabLabelCompare').textContent = s.tabCompare;
+
+  // Update map & compare titles
+  const mapTitle = document.getElementById('mapTitle');
+  if (mapTitle) mapTitle.textContent = s.mapTitle;
+  const compareTitle = document.getElementById('compareTitle');
+  if (compareTitle) compareTitle.textContent = s.compareTitle;
+
   // Update upazila detail panel labels
   document.getElementById('udLabelUtility').textContent = s.udLabelUtility;
   document.getElementById('udLabelType').textContent = s.udLabelType;
   document.getElementById('udLabelPhone').textContent = s.udLabelPhone;
   document.getElementById('udLabelHelpline').textContent = s.udLabelHelpline;
+
+  // Re-render comparison table
+  renderComparisonTable();
+
+  // Update map markers if visible
+  updateMapLanguage();
 
   // Update accordion headers text without re-fetching
   updateAccordionLanguage();
@@ -573,6 +641,39 @@ function showUpazilaDetail(nameEn, nameBn, utilityCode) {
     zonesEl.style.display = 'none';
   }
 
+  // Community reports section
+  const reportSection = document.getElementById('upazilaReportSection');
+  const reportStatusEl = document.getElementById('upazilaReportStatus');
+  const reportHistoryEl = document.getElementById('upazilaReportHistory');
+
+  if (nameEn && selectedDistrict) {
+    reportSection.style.display = 'block';
+
+    // Update report buttons with current upazila name
+    document.getElementById('upazilaReportCut').setAttribute('onclick', `reportPowerCut('${nameEn.replace(/'/g, "\\'")}')`);
+    document.getElementById('upazilaReportOn').setAttribute('onclick', `reportPowerOn('${nameEn.replace(/'/g, "\\'")}')`);
+    document.getElementById('upazilaReportCutBtn').textContent = STRINGS[currentLang].reportSubmitCut;
+    document.getElementById('upazilaReportOnBtn').textContent = STRINGS[currentLang].reportSubmitOn;
+
+    // Load recent reports
+    loadUpazilaReports(nameEn, selectedDistrict.district.key).then((data) => {
+      if (data && data.reports && data.reports.length > 0) {
+        const latest = data.reports[0];
+        const statusIcon = latest.status === 'cut' ? '🔌' : '💡';
+        const statusText = latest.status === 'cut'
+          ? (currentLang === 'bn' ? 'পাওয়ার কাট' : 'Power Cut')
+          : (currentLang === 'bn' ? 'পাওয়ার চালু' : 'Power On');
+        reportStatusEl.innerHTML = `<span class="report-indicator ${latest.status === 'cut' ? 'cut' : 'on'}">${statusIcon} ${statusText}</span>`;
+      } else {
+        reportStatusEl.innerHTML = '';
+      }
+
+      renderUpazilaReports('upazilaReportHistory', data?.reports || []);
+    });
+  } else {
+    reportSection.style.display = 'none';
+  }
+
   // Show panel with animation
   panel.classList.remove('hidden');
   panel.classList.remove('closing');
@@ -733,21 +834,295 @@ function getUtilityType(code) {
   return info || null;
 }
 
-// ── Reports ──────────────────────────────────────────────
-function reportPowerCut() {
-  if (!selectedDistrict) {
-    showToast(currentLang === 'bn' ? 'প্রথমে একটি জেলা নির্বাচন করুন' : 'Select a district first', 'error');
-    return;
+// ── Tab Switching ──────────────────────────────────────────
+function switchTab(tab) {
+  // Update tab buttons
+  document.querySelectorAll('.tab-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+
+  // Show/hide tab content
+  document.querySelectorAll('.tab-content').forEach((content) => {
+    content.classList.toggle('hidden', !content.id.includes(`TabContent${tab.charAt(0).toUpperCase() + tab.slice(1)}`));
+  });
+
+  // Refresh map size when map tab is shown (Leaflet needs re-render)
+  if (tab === 'map' && window._mapInstance) {
+    setTimeout(() => window._mapInstance.invalidateSize(), 200);
   }
-  showToast(STRINGS[currentLang].powerCutReported, 'error');
 }
 
-function reportPowerOn() {
-  if (!selectedDistrict) {
-    showToast(currentLang === 'bn' ? 'প্রথমে একটি জেলা নির্বাচন করুন' : 'Select a district first', 'error');
+// ── Map View (Leaflet) ─────────────────────────────────────
+function initMap() {
+  const container = document.getElementById('mapContainer');
+  if (!container) return;
+
+  const map = L.map('mapContainer', {
+    center: [23.8, 90.4],
+    zoom: 7,
+    zoomControl: true,
+    attributionControl: false,
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '© OpenStreetMap contributors',
+  }).addTo(map);
+
+  window._mapInstance = map;
+
+  // Utility color mapping
+  const utilColors = {
+    'DESCO': '#4a7cf7',
+    'DPDC': '#34d399',
+    'NESCO': '#f59e0b',
+    'WZPDCL': '#ef4444',
+    'BPDB': '#8b5cf6',
+    'BREB': '#06b6d4',
+  };
+
+  // Markers for each district
+  if (allDistrictsCache.length > 0) {
+    addDistrictMarkers(map, utilColors);
+  } else {
+    // Wait for districts to load
+    const checkDistricts = setInterval(() => {
+      if (allDistrictsCache.length > 0) {
+        clearInterval(checkDistricts);
+        addDistrictMarkers(map, utilColors);
+      }
+    }, 200);
+  }
+}
+
+function addDistrictMarkers(map, colors) {
+  const bounds = L.latLngBounds();
+  window._mapMarkers = [];
+
+  allDistrictsCache.forEach((item) => {
+    const d = item.district;
+    const util = d.utilities[0] || 'BPDB';
+    const color = colors[util] || '#8b5cf6';
+    const name = currentLang === 'bn' ? d.name_bn : d.name_en;
+
+    const marker = L.circleMarker([d.lat, d.lon], {
+      radius: 8,
+      fillColor: color,
+      color: '#fff',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.8,
+    }).addTo(map);
+
+    marker.bindTooltip(name, {
+      direction: 'top',
+      offset: [0, -5],
+      className: 'map-tooltip',
+    });
+
+    marker.on('click', () => {
+      selectDistrict(d.key);
+      switchTab('district');
+    });
+
+    bounds.extend([d.lat, d.lon]);
+
+    // Store reference for language updates
+    window._mapMarkers.push({ marker, district: d });
+  });
+
+  map.fitBounds(bounds.pad(0.1));
+}
+
+function updateMapLanguage() {
+  // Update tooltip texts on all map markers
+  if (!window._mapMarkers || window._mapMarkers.length === 0) return;
+  window._mapMarkers.forEach(({ marker, district }) => {
+    const name = currentLang === 'bn' ? district.name_bn : district.name_en;
+    marker.setTooltipContent(name);
+  });
+}
+
+// ── Utility Comparison Table ────────────────────────────────
+function renderComparisonTable() {
+  const cache = window._utilityCache;
+  if (!cache) {
+    // Try again after utilities are loaded
+    setTimeout(renderComparisonTable, 500);
     return;
   }
-  showToast(STRINGS[currentLang].powerOnReported, 'success');
+
+  const body = document.getElementById('compareBody');
+  if (!body) return;
+
+  const s = STRINGS[currentLang];
+  const utilKeys = Object.keys(cache);
+
+  // Define rows: key -> label
+  const rows = [
+    { key: 'type', label: s.compareRows.type },
+    { key: 'phone', label: s.compareRows.phone },
+    { key: 'helpline', label: s.compareRows.helpline },
+    { key: 'website', label: s.compareRows.website },
+    { key: 'zones', label: s.compareRows.zones },
+  ];
+
+  const typeMap = {
+    bn: { urban: '🏙️ শহর', regional: '🏘️ আঞ্চলিক', rural: '🌾 পল্লী' },
+    en: { urban: '🏙️ Urban', regional: '🏘️ Regional', rural: '🌾 Rural' },
+  };
+
+  body.innerHTML = rows
+    .map((row) => {
+      const cells = utilKeys
+        .map((key) => {
+          const info = cache[key];
+          if (!info) return '<td>—</td>';
+
+          let val;
+          if (row.key === 'type') {
+            val = typeMap[currentLang]?.[info.type] || info.type || '—';
+          } else if (row.key === 'website') {
+            const url = info.website || '';
+            val = url
+              ? `<a href="${url}" target="_blank" rel="noopener noreferrer" class="compare-link">🌐 ${new URL(url).hostname}</a>`
+              : '—';
+          } else if (row.key === 'zones') {
+            val = Array.isArray(info.zones)
+              ? info.zones.join('<br>')
+              : (info.zones || '—');
+          } else {
+            val = info[row.key] || '—';
+          }
+
+          return `<td>${val}</td>`;
+        })
+        .join('');
+
+      return `<tr><td class="compare-row-label">${row.label}</td>${cells}</tr>`;
+    })
+    .join('');
+
+  // Add subheader row for company names
+  const headerRow = body.closest('table').querySelector('thead tr');
+  if (headerRow) {
+    headerRow.innerHTML = `<th>${currentLang === 'bn' ? 'মাপ' : 'Measure'}</th>` +
+      utilKeys.map((key) => {
+        const info = cache[key];
+        const color = getUtilityColor(key);
+        const shortName = currentLang === 'bn' ? (info?.short_bn || key) : key;
+        return `<th style="border-top: 3px solid ${color}">${shortName}</th>`;
+      }).join('');
+  }
+}
+
+function getUtilityColor(code) {
+  const colors = {
+    'DESCO': '#4a7cf7',
+    'DPDC': '#34d399',
+    'NESCO': '#f59e0b',
+    'WZPDCL': '#ef4444',
+    'BPDB': '#8b5cf6',
+    'BREB': '#06b6d4',
+    'REB': '#06b6d4',
+  };
+  return colors[code] || '#888';
+}
+
+// ── Community Power Reports ─────────────────────────────────
+function reportPowerCut(upazilaName) {
+  if (!selectedDistrict) {
+    showToast(STRINGS[currentLang].reportSelectDistrict, 'error');
+    return;
+  }
+  const name = upazilaName || '';
+  submitReport(name, 'cut');
+}
+
+function reportPowerOn(upazilaName) {
+  if (!selectedDistrict) {
+    showToast(STRINGS[currentLang].reportSelectDistrict, 'error');
+    return;
+  }
+  const name = upazilaName || '';
+  submitReport(name, 'on');
+}
+
+async function submitReport(upazilaName, status) {
+  const dist = selectedDistrict.district;
+  const key = dist.key;
+
+  try {
+    const res = await fetch(`${API_BASE}/reports`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        upazila: upazilaName,
+        district: key,
+        status: status,
+      }),
+    });
+
+    if (!res.ok) throw new Error('Failed');
+
+    showToast(STRINGS[currentLang].reportSubmitted, 'success');
+
+    // Refresh upazila detail to show updated report status
+    if (currentUpazilaDetail) {
+      showUpazilaDetail(
+        currentUpazilaDetail.nameEn,
+        currentUpazilaDetail.nameBn,
+        currentUpazilaDetail.utilityCode
+      );
+    }
+  } catch {
+    showToast(STRINGS[currentLang].reportFailed, 'error');
+  }
+}
+
+async function loadUpazilaReports(upazilaName, districtKey) {
+  try {
+    const res = await fetch(`${API_BASE}/reports/${districtKey}/${encodeURIComponent(upazilaName)}`);
+    const data = await res.json();
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function renderUpazilaReports(containerId, reports) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (!reports || reports.length === 0) {
+    container.innerHTML = `<p class="no-reports">${STRINGS[currentLang].noReports}</p>`;
+    return;
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+
+  container.innerHTML = reports
+    .map((r) => {
+      const diff = now - r.timestamp;
+      let timeAgo;
+      if (diff < 60) {
+        timeAgo = STRINGS[currentLang].justNow;
+      } else if (diff < 3600) {
+        timeAgo = STRINGS[currentLang].minsAgo.replace('{m}', Math.floor(diff / 60));
+      } else {
+        timeAgo = STRINGS[currentLang].hoursAgo.replace('{h}', Math.floor(diff / 3600));
+      }
+
+      const icon = r.status === 'cut' ? '🔌' : '💡';
+      const cls = r.status === 'cut' ? 'report-cut' : 'report-on';
+
+      return `<div class="report-entry ${cls}">
+        <span>${icon}</span>
+        <span class="report-time">${timeAgo}</span>
+        ${r.note ? `<span class="report-note">${r.note}</span>` : ''}
+      </div>`;
+    })
+    .join('');
 }
 
 // ── Accordion ────────────────────────────────────────────
@@ -766,6 +1141,18 @@ async function buildAccordion() {
       const utilRes = await fetch(`${API_BASE}/utilities`);
       const utilData = await utilRes.json();
       window._utilityCache = utilData.utilities || {};
+    }
+
+    // Render comparison table now that utilities are loaded
+    renderComparisonTable();
+
+    // Add district markers to map if map is initialized
+    if (window._mapInstance && window._mapInstance._initHooksCalled) {
+      const colors = {
+        'DESCO': '#4a7cf7', 'DPDC': '#34d399', 'NESCO': '#f59e0b',
+        'WZPDCL': '#ef4444', 'BPDB': '#8b5cf6', 'BREB': '#06b6d4',
+      };
+      addDistrictMarkers(window._mapInstance, colors);
     }
 
     // Close first open accordion when opening another

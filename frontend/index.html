@@ -6,8 +6,10 @@
   <meta name="color-scheme" id="colorSchemeMeta" content="dark light">
   <title>বিদ্যুতজ্ঞান — লোডশেডিং সময়সূচী</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 <body>
 
@@ -40,6 +42,22 @@
   </header>
 
   <main class="container">
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav" id="tabNav">
+      <button class="tab-btn active" data-tab="district" onclick="switchTab('district')">
+        <span>📍</span> <span class="tab-label" id="tabLabelDistrict">জেলা তথ্য</span>
+      </button>
+      <button class="tab-btn" data-tab="map" onclick="switchTab('map')">
+        <span>🗺️</span> <span class="tab-label" id="tabLabelMap">মানচিত্র</span>
+      </button>
+      <button class="tab-btn" data-tab="compare" onclick="switchTab('compare')">
+        <span>📊</span> <span class="tab-label" id="tabLabelCompare">তুলনা</span>
+      </button>
+    </nav>
+
+    <!-- Tab: District Info (default) -->
+    <div class="tab-content" id="tabContentDistrict">
 
     <!-- 🔍 Search Section -->
     <section class="card search-card">
@@ -184,6 +202,23 @@
               <span class="upazila-detail-value" id="upazilaDetailHelpline">—</span>
             </div>
           </div>
+          <!-- Community Reports -->
+          <div class="upazila-detail-reports" id="upazilaReportSection" style="display:none">
+            <div class="upazila-reports-header">
+              <span class="reports-title">📢 কমিউনিটি রিপোর্ট</span>
+              <span id="upazilaReportStatus"></span>
+            </div>
+            <div class="upazila-reports-actions">
+              <button class="btn btn-report btn-powercut" id="upazilaReportCut" onclick="reportPowerCut('')">
+                <span id="upazilaReportCutBtn">🔌 পাওয়ার কাট রিপোর্ট করুন</span>
+              </button>
+              <button class="btn btn-report btn-poweron" id="upazilaReportOn" onclick="reportPowerOn('')">
+                <span id="upazilaReportOnBtn">💡 পাওয়ার ফিরেছে রিপোর্ট করুন</span>
+              </button>
+            </div>
+            <div class="upazila-reports-history" id="upazilaReportHistory"></div>
+          </div>
+
           <div class="upazila-detail-footer">
             <a id="upazilaDetailWebsite" href="#" target="_blank" rel="noopener noreferrer" class="upazila-detail-link"></a>
             <span class="upazila-detail-zones" id="upazilaDetailZones"></span>
@@ -206,6 +241,48 @@
         <!-- Populated by JS -->
       </div>
     </section>
+
+    </div><!-- /tabContentDistrict -->
+
+    <!-- Tab: Map View -->
+    <div class="tab-content hidden" id="tabContentMap">
+      <section class="card map-card">
+        <h2 id="mapTitle">🗺️ Utility Map of Bangladesh</h2>
+        <div id="mapContainer" class="map-container"></div>
+        <div class="map-legend" id="mapLegend">
+          <div class="legend-row"><span class="legend-dot" style="background:#4a7cf7"></span> DESCO</div>
+          <div class="legend-row"><span class="legend-dot" style="background:#34d399"></span> DPDC</div>
+          <div class="legend-row"><span class="legend-dot" style="background:#f59e0b"></span> NESCO</div>
+          <div class="legend-row"><span class="legend-dot" style="background:#ef4444"></span> WZPDCL</div>
+          <div class="legend-row"><span class="legend-dot" style="background:#8b5cf6"></span> BPDB</div>
+          <div class="legend-row"><span class="legend-dot" style="background:#06b6d4"></span> BREB/REB</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Tab: Utility Comparison -->
+    <div class="tab-content hidden" id="tabContentCompare">
+      <section class="card compare-card">
+        <h2 id="compareTitle">📊 Utility Company Comparison</h2>
+        <div class="compare-wrapper">
+          <table class="compare-table" id="compareTable">
+            <thead>
+              <tr>
+                <th>মাপ</th>
+                <th>DESCO</th>
+                <th>DPDC</th>
+                <th>NESCO</th>
+                <th>WZPDCL</th>
+                <th>BPDB</th>
+                <th>BREB/REB</th>
+              </tr>
+            </thead>
+            <tbody id="compareBody">
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
 
   </main>
 
