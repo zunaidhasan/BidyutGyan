@@ -450,8 +450,8 @@ function renderDistrictInfo(data) {
       : `🏘️ Upazilas (${dist.total_upazilas})`;
 
     list.innerHTML = dist.upazilas
-      .map((u) => `
-        <div class="upazila-item" onclick="showUpazilaDetail('${u.name_en}', '${u.name_bn}', '${u.utility}')">
+      .map((u, i) => `
+        <div class="upazila-item" style="--stagger-index:${i}" onclick="showUpazilaDetail('${u.name_en}', '${u.name_bn}', '${u.utility}')">
           <span class="upazila-name">${currentLang === 'bn' ? u.name_bn : u.name_en}</span>
           <span class="upazila-utility">${u.utility}</span>
         </div>
@@ -672,17 +672,27 @@ function filterUpazilas() {
   const items = document.querySelectorAll('#upazilaList .upazila-item');
   const noResults = document.getElementById('upazilaNoResults');
 
-  let visibleCount = 0;
+  let visibleIndex = 0;
   items.forEach((item) => {
     const name = item.querySelector('.upazila-name');
     if (!name) return;
     const match = name.textContent.toLowerCase().includes(query);
-    item.style.display = match ? '' : 'none';
-    if (match) visibleCount++;
+    if (match) {
+      item.style.display = '';
+      // Re-trigger stagger animation by updating index
+      item.style.setProperty('--stagger-index', visibleIndex);
+      // Reset animation to re-trigger it
+      item.style.animation = 'none';
+      item.offsetHeight; // force reflow
+      item.style.animation = '';
+      visibleIndex++;
+    } else {
+      item.style.display = 'none';
+    }
   });
 
   // Show/hide no-results message
-  if (visibleCount === 0 && items.length > 0) {
+  if (visibleIndex === 0 && items.length > 0) {
     noResults.classList.remove('hidden');
   } else {
     noResults.classList.add('hidden');
@@ -698,9 +708,14 @@ function clearUpazilaFilter() {
     input.value = '';
   }
   document.getElementById('upazilaNoResults').classList.add('hidden');
-  // Reset all items to visible
-  document.querySelectorAll('#upazilaList .upazila-item').forEach((item) => {
+  // Reset all items to visible with staggered animation
+  const items = document.querySelectorAll('#upazilaList .upazila-item');
+  items.forEach((item, i) => {
     item.style.display = '';
+    item.style.setProperty('--stagger-index', i);
+    item.style.animation = 'none';
+    item.offsetHeight;
+    item.style.animation = '';
   });
   // Reset keyboard focus
   focusUpazilaItem(-1);
