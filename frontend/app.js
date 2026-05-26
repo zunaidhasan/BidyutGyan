@@ -7,6 +7,7 @@ let currentLang = 'bn'; // 'bn' | 'en'
 let selectedDistrict = null;
 let allDistrictsCache = [];
 let searchTimeout = null;
+let currentTheme = 'dark'; // 'dark' | 'light'
 let isLoading = {
   districts: false,
   divisions: false,
@@ -111,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => handleSearch(), 250);
   });
+
+  // Initialize theme
+  initTheme();
 });
 
 // ── Toast Notification System ────────────────────────────
@@ -160,6 +164,37 @@ async function loadAllDistricts() {
 }
 
 // ── Toggle Language ──────────────────────────────────────
+// ── Theme Toggle ────────────────────────────────────────
+function initTheme() {
+  const saved = localStorage.getItem('bidyutgyan-theme');
+  if (saved === 'light' || saved === 'dark') {
+    currentTheme = saved;
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    currentTheme = 'light';
+  }
+  applyTheme(currentTheme);
+
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('bidyutgyan-theme')) {
+      currentTheme = e.matches ? 'light' : 'dark';
+      applyTheme(currentTheme);
+    }
+  });
+}
+
+function toggleTheme() {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('bidyutgyan-theme', currentTheme);
+  applyTheme(currentTheme);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const icon = document.getElementById('themeIcon');
+  icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+}
+
 function toggleLang() {
   currentLang = currentLang === 'bn' ? 'en' : 'bn';
   const btn = document.getElementById('langBtn');
