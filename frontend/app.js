@@ -45,6 +45,8 @@ const STRINGS = {
     typeRural: 'পল্লী',
     langLabel: 'English',
     searching: 'অনুসন্ধান...',
+    upazilaFilterPlaceholder: 'উপজেলা খুঁজুন...',
+    upazilaNoResults: 'কোনো উপজেলা পাওয়া যায়নি',
     locationDenied: 'অবস্থান অ্যাক্সেস করতে ব্যর্থ। দয়া করে অবস্থান অনুমতি দিন।',
     locationNotFound: 'আপনার এলাকা খুঁজে পাওয়া যায়নি',
     noGeolocation: 'আপনার ব্রাউজারে অবস্থান সুবিধা নেই',
@@ -85,6 +87,8 @@ const STRINGS = {
     typeRural: 'Rural',
     langLabel: 'বাংলা',
     searching: 'Searching...',
+    upazilaFilterPlaceholder: 'Filter upazilas...',
+    upazilaNoResults: 'No upazilas found',
     locationDenied: 'Failed to access location. Please allow location permission.',
     locationNotFound: 'Could not find your area',
     noGeolocation: 'Geolocation not available in your browser',
@@ -252,6 +256,13 @@ function updateUILanguage() {
   if (selectedDistrict) {
     renderDistrictInfo(selectedDistrict);
   }
+
+  // Update upazila filter
+  const filterInput = document.getElementById('upazilaFilterInput');
+  if (filterInput) {
+    filterInput.placeholder = s.upazilaFilterPlaceholder;
+  }
+  document.getElementById('upazilaNoResults').textContent = s.upazilaNoResults;
 
   // Update upazila detail panel labels
   document.getElementById('udLabelUtility').textContent = s.udLabelUtility;
@@ -444,8 +455,9 @@ function renderDistrictInfo(data) {
       `)
       .join('');
     upazilaSection.classList.remove('hidden');
-    // Close detail panel when a new district is loaded
+    // Close detail panel and clear filter when a new district is loaded
     closeUpazilaDetail();
+    clearUpazilaFilter();
   } else {
     upazilaSection.classList.add('hidden');
     closeUpazilaDetail();
@@ -577,6 +589,42 @@ function closeUpazilaDetail() {
   }, 300);
 
   currentUpazilaDetail = null;
+}
+
+// ── Upazila Filter ─────────────────────────────────────────
+function filterUpazilas() {
+  const input = document.getElementById('upazilaFilterInput');
+  const query = input.value.trim().toLowerCase();
+  const items = document.querySelectorAll('#upazilaList .upazila-item');
+  const noResults = document.getElementById('upazilaNoResults');
+
+  let visibleCount = 0;
+  items.forEach((item) => {
+    const name = item.querySelector('.upazila-name');
+    if (!name) return;
+    const match = name.textContent.toLowerCase().includes(query);
+    item.style.display = match ? '' : 'none';
+    if (match) visibleCount++;
+  });
+
+  // Show/hide no-results message
+  if (visibleCount === 0 && items.length > 0) {
+    noResults.classList.remove('hidden');
+  } else {
+    noResults.classList.add('hidden');
+  }
+}
+
+function clearUpazilaFilter() {
+  const input = document.getElementById('upazilaFilterInput');
+  if (input) {
+    input.value = '';
+  }
+  document.getElementById('upazilaNoResults').classList.add('hidden');
+  // Reset all items to visible
+  document.querySelectorAll('#upazilaList .upazila-item').forEach((item) => {
+    item.style.display = '';
+  });
 }
 
 // ── Utility Metadata ─────────────────────────────────────

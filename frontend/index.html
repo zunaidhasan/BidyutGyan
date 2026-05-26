@@ -145,7 +145,18 @@
       <!-- Upazilas / Sub-Districts -->
       <div id="upazilaSection" class="upazila-section hidden">
         <h3 id="upazilaLabel">🏘️ উপজেলা</h3>
+        <div class="upazila-filter">
+          <input
+            type="text"
+            id="upazilaFilterInput"
+            placeholder="উপজেলা খুঁজুন..."
+            autocomplete="off"
+            oninput="filterUpazilas()"
+          />
+          <span class="upazila-filter-icon">🔍</span>
+        </div>
         <div id="upazilaList" class="upazila-grid"></div>
+        <div id="upazilaNoResults" class="upazila-no-results hidden">কোনো উপজেলা পাওয়া যায়নি</div>
 
         <!-- Upazila Detail Panel (appears on click) -->
         <div id="upazilaDetailPanel" class="upazila-detail-panel hidden">

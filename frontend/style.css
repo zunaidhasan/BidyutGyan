@@ -888,6 +888,57 @@ body::after {
   margin-bottom: 0.75rem;
 }
 
+.upazila-filter {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.upazila-filter input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.85rem 0.55rem 2.2rem;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+
+.upazila-filter input:focus {
+  border-color: rgba(74, 124, 247, 0.4);
+  box-shadow: 0 0 0 2px rgba(74, 124, 247, 0.08);
+}
+
+.upazila-filter input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.upazila-filter-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.upazila-no-results {
+  text-align: center;
+  padding: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-style: italic;
+  background: var(--placeholder-bg);
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--radius-xs);
+  margin-top: 0.25rem;
+}
+
 .upazila-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
