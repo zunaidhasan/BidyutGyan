@@ -36,6 +36,10 @@ const STRINGS = {
     searchNoResults: 'কোনো জেলা পাওয়া যায়নি',
     poweredBy: '⚡ বিদ্যুতজ্ঞান — নির্মিত বাংলাদেশের জন্য',
     footerNote: 'ডেটা নির্ভুলতার জন্য সর্বোচ্চ চেষ্টা করা হয়েছে। সরকারি সূত্র থেকে সর্বশেষ তথ্য যাচাই করুন।',
+    udLabelUtility: '⚡ সরবরাহকারী',
+    udLabelType: '🏢 ধরন',
+    udLabelPhone: '📞 ফোন',
+    udLabelHelpline: '📱 হটলাইন',
     typeUrban: 'শহর',
     typeRegional: 'আঞ্চলিক',
     typeRural: 'পল্লী',
@@ -72,6 +76,10 @@ const STRINGS = {
     searchNoResults: 'No districts found',
     poweredBy: '⚡ BidyutGyan — Built for Bangladesh',
     footerNote: 'Every effort has been made for data accuracy. Please verify latest info from official sources.',
+    udLabelUtility: '⚡ Supplier',
+    udLabelType: '🏢 Type',
+    udLabelPhone: '📞 Phone',
+    udLabelHelpline: '📱 Helpline',
     typeUrban: 'Urban',
     typeRegional: 'Regional',
     typeRural: 'Rural',
@@ -245,8 +253,23 @@ function updateUILanguage() {
     renderDistrictInfo(selectedDistrict);
   }
 
+  // Update upazila detail panel labels
+  document.getElementById('udLabelUtility').textContent = s.udLabelUtility;
+  document.getElementById('udLabelType').textContent = s.udLabelType;
+  document.getElementById('udLabelPhone').textContent = s.udLabelPhone;
+  document.getElementById('udLabelHelpline').textContent = s.udLabelHelpline;
+
   // Update accordion headers text without re-fetching
   updateAccordionLanguage();
+
+  // Update upazila detail panel if open
+  if (currentUpazilaDetail) {
+    showUpazilaDetail(
+      currentUpazilaDetail.nameEn,
+      currentUpazilaDetail.nameBn,
+      currentUpazilaDetail.utilityCode
+    );
+  }
 }
 
 // ── Geolocation ──────────────────────────────────────────
@@ -414,15 +437,18 @@ function renderDistrictInfo(data) {
 
     list.innerHTML = dist.upazilas
       .map((u) => `
-        <div class="upazila-item">
+        <div class="upazila-item" onclick="showUpazilaDetail('${u.name_en}', '${u.name_bn}', '${u.utility}')">
           <span class="upazila-name">${currentLang === 'bn' ? u.name_bn : u.name_en}</span>
           <span class="upazila-utility">${u.utility}</span>
         </div>
       `)
       .join('');
     upazilaSection.classList.remove('hidden');
+    // Close detail panel when a new district is loaded
+    closeUpazilaDetail();
   } else {
     upazilaSection.classList.add('hidden');
+    closeUpazilaDetail();
   }
 
   // Utility info
@@ -464,6 +490,93 @@ function renderDistrictInfo(data) {
   } else if (noteEl) {
     noteEl.remove();
   }
+}
+
+// ── Upazila Detail View ───────────────────────────────────
+let currentUpazilaDetail = null;
+
+function showUpazilaDetail(nameEn, nameBn, utilityCode) {
+  const panel = document.getElementById('upazilaDetailPanel');
+  if (!panel) return;
+
+  // If clicking the same upazila, toggle close
+  if (currentUpazilaDetail && currentUpazilaDetail.nameEn === nameEn) {
+    closeUpazilaDetail();
+    return;
+  }
+
+  currentUpazilaDetail = { nameEn, nameBn, utilityCode };
+
+  const info = getUtilityInfo(utilityCode);
+  const s = STRINGS[currentLang];
+
+  // Upazila name
+  document.getElementById('upazilaDetailName').textContent = currentLang === 'bn' ? nameBn : nameEn;
+
+  // Utility name
+  const utilNameEl = document.getElementById('upazilaDetailUtility');
+  if (info) {
+    utilNameEl.textContent = currentLang === 'bn' ? info.name_bn : info.name_en;
+  } else {
+    utilNameEl.textContent = utilityCode;
+  }
+
+  // Utility code badge
+  document.getElementById('upazilaDetailCode').textContent = utilityCode;
+
+  // Type
+  const typeMap = {
+    bn: { urban: '🏙️ শহর', regional: '🏘️ আঞ্চলিক', rural: '🌾 পল্লী' },
+    en: { urban: '🏙️ Urban', regional: '🏘️ Regional', rural: '🌾 Rural' },
+  };
+  document.getElementById('upazilaDetailType').textContent = info
+    ? (typeMap[currentLang]?.[info.type] || info.type)
+    : '—';
+
+  // Phone
+  document.getElementById('upazilaDetailPhone').textContent = info?.phone || '—';
+
+  // Helpline
+  document.getElementById('upazilaDetailHelpline').textContent = info?.helpline || '—';
+
+  // Website
+  const link = document.getElementById('upazilaDetailWebsite');
+  if (info?.website) {
+    link.href = info.website;
+    link.textContent = `🌐 ${info.website}`;
+    link.style.display = 'inline-block';
+  } else {
+    link.style.display = 'none';
+  }
+
+  // Zones
+  const zonesEl = document.getElementById('upazilaDetailZones');
+  if (info?.zones && info.zones.length > 0) {
+    zonesEl.textContent = info.zones.join('; ');
+    zonesEl.style.display = 'block';
+  } else {
+    zonesEl.style.display = 'none';
+  }
+
+  // Show panel with animation
+  panel.classList.remove('hidden');
+  panel.classList.remove('closing');
+  panel.classList.add('open');
+}
+
+function closeUpazilaDetail() {
+  const panel = document.getElementById('upazilaDetailPanel');
+  if (!panel || panel.classList.contains('hidden')) return;
+
+  panel.classList.add('closing');
+  panel.classList.remove('open');
+
+  setTimeout(() => {
+    panel.classList.add('hidden');
+    panel.classList.remove('closing');
+  }, 300);
+
+  currentUpazilaDetail = null;
 }
 
 // ── Utility Metadata ─────────────────────────────────────

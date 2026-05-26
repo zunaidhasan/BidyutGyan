@@ -146,6 +146,38 @@
       <div id="upazilaSection" class="upazila-section hidden">
         <h3 id="upazilaLabel">🏘️ উপজেলা</h3>
         <div id="upazilaList" class="upazila-grid"></div>
+
+        <!-- Upazila Detail Panel (appears on click) -->
+        <div id="upazilaDetailPanel" class="upazila-detail-panel hidden">
+          <button class="upazila-detail-close" onclick="closeUpazilaDetail()" title="বন্ধ করুন">✕</button>
+          <div class="upazila-detail-header">
+            <span class="upazila-detail-name" id="upazilaDetailName">—</span>
+            <span class="upazila-detail-code" id="upazilaDetailCode">—</span>
+          </div>
+          <div class="upazila-detail-divider"></div>
+          <div class="upazila-detail-grid">
+            <div class="upazila-detail-item">
+              <span class="upazila-detail-label" id="udLabelUtility">⚡ সরবরাহকারী</span>
+              <span class="upazila-detail-value" id="upazilaDetailUtility">—</span>
+            </div>
+            <div class="upazila-detail-item">
+              <span class="upazila-detail-label" id="udLabelType">🏢 ধরন</span>
+              <span class="upazila-detail-value" id="upazilaDetailType">—</span>
+            </div>
+            <div class="upazila-detail-item">
+              <span class="upazila-detail-label" id="udLabelPhone">📞 ফোন</span>
+              <span class="upazila-detail-value" id="upazilaDetailPhone">—</span>
+            </div>
+            <div class="upazila-detail-item">
+              <span class="upazila-detail-label" id="udLabelHelpline">📱 হটলাইন</span>
+              <span class="upazila-detail-value" id="upazilaDetailHelpline">—</span>
+            </div>
+          </div>
+          <div class="upazila-detail-footer">
+            <a id="upazilaDetailWebsite" href="#" target="_blank" rel="noopener noreferrer" class="upazila-detail-link"></a>
+            <span class="upazila-detail-zones" id="upazilaDetailZones"></span>
+          </div>
+        </div>
       </div>
 
       <!-- Utility Info -->
